@@ -23,11 +23,9 @@ export default function App() {
                 height={189}
                 priority
               />
-              <Register />
           </div>
-          
         </main>
-        
+        <Register />
       </>
   )
 }
