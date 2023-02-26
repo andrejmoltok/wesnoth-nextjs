@@ -1,0 +1,56 @@
+@import "variables";
+
+/* TODO: there must be a better way to include every
+ * Sass mixin we need
+ */
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/vendor/rfs";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/navbar";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/utilities";
+
+.main {
+  margin:auto;
+  padding: 0;
+}
+
+.logo {
+  @include make-col(12);
+  min-height: 40vh;
+  text-align: center;
+}
+
+.logo img {
+  margin: 20vh auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.list {
+  @include make-col(12);
+}
+
+.list ul {
+  @extend .nav;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.list li {
+  list-style-type: none;
+  margin: 0 15px;
+}
+
+.list a {
+  @extend .btn;
+}
+
+.list li img {
+  margin: 0px 10px 0px 0px;
+  vertical-align: middle;
+}

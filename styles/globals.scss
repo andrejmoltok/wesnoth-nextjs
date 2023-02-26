@@ -1,0 +1,33 @@
+/*
+ * Use Sass because it is easier to customize Bootstrap
+ *
+ * https://sass-lang.com/
+ */
+
+@import "variables";
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+/*
+ * Custom styles for the Wesnoth Portal
+*/
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      $background-end
+    )
+    $background-start;
+
+  font-family: serif;
+}
+
+main {
+  @include make-container();
+  @include make-row();
+}
