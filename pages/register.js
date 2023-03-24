@@ -2,27 +2,47 @@ import styles from '../styles/Register.module.css'
 import Image from 'next/image'
 import { useState } from 'react'
 import validator from 'validator'
+import { gql, useMutation } from "@apollo/client"
+
+const REGISTER = gql`
+mutation Register($data: UserCreateInput!) {
+    createUser(data: $data) {
+      name
+      email
+      password {
+        isSet
+      }
+      race {
+        races
+      }
+      isPending
+    }
+  }
+    `;
 
 export default function Register() {
 
+    
     // username input value
     var [usernameInput, setUsernameInput] = useState("");
     // email input value
     var [emailInput, setEmailInput] = useState("");
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
-    // select input
-    var [selectInput,setSelectInput] = useState("");
+    // dropdown list
+    const [value, setValue] = useState('favicon');
+
     // username validator
     const [errorUserMsg, setErrorUserMsg] = useState('');
     // email validator
     const [errorEmailMsg, setErrorEmailMsg] = useState('');
     // password validator
     const [errorPassMsg, setErrorPassMsg] = useState('');
+
     // submit button enable/disable
     const [toggleRegBtn, setToggleRegBtn] = useState(true);
-    // dropdown list
-    const [value, setValue] = useState('bat');
+
+    
 
     const validateUser = (value) => {
         if (!validator.isEmpty(value) && validator.isAlphanumeric(value) && validator.isLength(value, {
@@ -65,33 +85,56 @@ export default function Register() {
         }
     }
 
+    // register mutation
+    const [register, { data, loading, error }] = useMutation(REGISTER, {
+        variables: {
+        "data": {
+          "name": usernameInput,
+          "email": emailInput,
+          "password": passwordInput,
+          "race": {
+            "connect": {
+                "name": value
+            }
+          },
+          "isPending": true 
+        }}
+      });
+
+      if (loading) return 'Submitting...';
+      if (error) return `Submission error! ${error.message}`;
+
     return (
     <>
-        <form id="form">
+        <form id="form"
+        onSubmit={e => {
+            e.preventDefault();
+            register();
+          }}>
         <div className={styles.register}>
             <label htmlFor="username">Felhasználónév</label>
-            <input type="text" name="username" onChange={(u) => {validateUser(u.target.value)}} onBlur={(un) => {setUsernameInput(un.target.value)}} />
+            <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} />
             {errorUserMsg === '' ? null : 
                 <span style={{
                     fontWeight: 'thin',
                     color: 'red',
                 }}>{errorUserMsg}</span>}
             <label htmlFor="email" className={styles.dist}>Email</label>
-            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value)}} onBlur={(em) => {setEmailInput(em.target.value)}} />
+            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value);setEmailInput(e.target.value)}} />
             {errorEmailMsg === '' ? null : 
                 <span style={{
                         fontWeight: 'thin', 
                         color: 'red',
                 }}>{errorEmailMsg}</span>}
             <label htmlFor="password" className={styles.dist}>Jelszó</label>
-            <input type="password" name="password" onChange={(p) => {validatePass(p.target.value)}} onBlur={(pw) => {setPasswordInput(pw.target.value)}} />
+            <input type="password" name="password" onChange={(p) => {validatePass(p.target.value); setPasswordInput(p.target.value)}} />
             {errorPassMsg === '' ? null :
                 <span style={{
                         fontWeight: 'thin',
                         color: 'red',
                 }}>{errorPassMsg}</span>}
             <label htmlFor="faj" className={styles.dist}>Faj</label>
-            <select name="faj" onChange={(e) => {setValue(e.target.value)}} onClick={(sel) => {setSelectInput(sel.target.value)}}>
+            <select name="faj" onChange={(e) => {setValue(e.target.value)}}>
                     <option value="bat" >Denevérek</option>
                     <option value="dunefolk" >Dűnék-népe</option>
                     <option value="human" >Emberek</option>
@@ -110,7 +153,7 @@ export default function Register() {
                     <option value="merfolk" >Sellők</option>
                     <option value="falcon" >Sólymok</option>
                     <option value="monster" >Szörnyek</option>
-                    <option value="dwarve" >Törpök</option>
+                    <option value="dwarf" >Törpök</option>
                     <option value="troll" >Trollok</option>
                     <option value="elf" >Tündék</option>
             </select>
@@ -127,7 +170,7 @@ export default function Register() {
             </div>
             
             <div className={styles.button}>
-                <button disabled={toggleRegBtn} onClick={() => {}}>Regisztrálok</button>
+                <button disabled={toggleRegBtn}>Regisztrálok</button>
             </div>
         </div>
         </form>
