@@ -1,5 +1,5 @@
 import styles from '../styles/Register.module.css'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import { useState } from 'react'
 import validator from 'validator'
 import { gql, useMutation } from "@apollo/client"
@@ -30,7 +30,7 @@ export default function Register() {
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
     // dropdown list
-    const [value, setValue] = useState('favicon');
+    const [value, setValue] = useState('bat');
 
     // username validator
     const [errorUserMsg, setErrorUserMsg] = useState('');
@@ -104,41 +104,43 @@ export default function Register() {
 
     return (
     <>
-        <form id="form"
+    {loading ? 'Folyamatban...' : error ? `Folyamat hiba! ${error.message}` :
+    <div className={styles.register}>
+        <form className={styles.form}
             onSubmit={e => {
                 e.preventDefault();
                 register();
+                setValue('bat');
           }}>
-
-        <div className={styles.register}>
-
-        {loading ? 'Folyamatban...' : error ? `Folyamat hiba! ${error.message}` : <>
-            <label htmlFor="username">Felhasználónév</label>
-            <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} />
+        
+        
+            <label htmlFor="username">Felhasználónév:</label>
+            <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} className={styles.username}/>
             {errorUserMsg === '' ? null : 
                 <span style={{
                     fontWeight: 'thin',
                     color: 'red',
                 }}>{errorUserMsg}</span>}
 
-            <label htmlFor="email" className={styles.dist}>Email</label>
-            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value); setEmailInput(e.target.value)}} />
+            <label htmlFor="email" className={styles.dist}>Email:</label>
+            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value); setEmailInput(e.target.value)}} className={styles.email}/>
             {errorEmailMsg === '' ? null : 
                 <span style={{
                         fontWeight: 'thin', 
                         color: 'red',
                 }}>{errorEmailMsg}</span>}
 
-            <label htmlFor="password" className={styles.dist}>Jelszó</label>
-            <input type="password" name="password" onChange={(p) => {validatePass(p.target.value); setPasswordInput(p.target.value)}} />
+            <label htmlFor="password" className={styles.dist}>Jelszó:</label>
+            <input type="password" name="password" onChange={(p) => {validatePass(p.target.value); setPasswordInput(p.target.value)}} className={styles.password}/>
             {errorPassMsg === '' ? null :
                 <span style={{
                         fontWeight: 'thin',
                         color: 'red',
                 }}>{errorPassMsg}</span>}
-
-            <label htmlFor="faj" className={styles.dist}>Faj</label>
-            <select name="faj" onChange={(e) => {setValue(e.target.value)}}>
+            
+            <label htmlFor="faj" className={styles.dist}>Faj:</label>
+            <div>
+            <select name="faj" onChange={(e) => {setValue(e.target.value)}} className={styles.select}>
                     <option value="bat" >Denevérek</option>
                     <option value="dunefolk" >Dűnék-népe</option>
                     <option value="human" >Emberek</option>
@@ -161,6 +163,8 @@ export default function Register() {
                     <option value="troll" >Trollok</option>
                     <option value="elf" >Tündék</option>
             </select>
+            </div>
+            
             
             <div className={styles.fajkep}>
                 {/* fajok képeit mutatja kattintásra a listából */}
@@ -176,9 +180,10 @@ export default function Register() {
             <div className={styles.button}>
                 <button disabled={toggleRegBtn}>Regisztrálok</button>
             </div>
-        </>}
-        </div>
+        
+            
         </form>
+        </div>}
     </>
     ) 
 }

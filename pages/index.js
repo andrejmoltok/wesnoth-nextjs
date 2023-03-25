@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import styles from '../styles/Home.module.scss'
 import Register from './register'
 import { ApolloProvider } from '@apollo/client';
@@ -16,21 +16,20 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ApolloProvider client={client}>
-        <main className={styles.main}>
-          <div className={styles.logo}>
-              <Image
+      <main className={styles.main}>
+        <div className={styles.logo}>
+            <Image
                 src='/logo-hu.png'
                 alt="Logo"
                 width={415}
                 height={189}
                 priority
-              />
-          </div>
-        </main>
-        
-      {/* <Query /> */}
-      {/* <Register /> */}
+            />
+        </div>
+      </main>
+      <ApolloProvider client={client}>
+        {/* <Query /> */}
+        <Register />
       </ApolloProvider>
       </>
   )
