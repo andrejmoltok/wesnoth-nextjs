@@ -88,30 +88,31 @@ export default function Register() {
     // register mutation
     const [register, { data, loading, error }] = useMutation(REGISTER, {
         variables: {
-        "data": {
-          "name": usernameInput,
-          "email": emailInput,
-          "password": passwordInput,
-          "race": {
-            "connect": {
-                "name": value
+            "data": {
+                "name": usernameInput,
+                "email": emailInput,
+                "password": passwordInput,
+                "race": {
+                    "connect": {
+                        "name": value
+                    }
+                },
+                "isPending": true 
             }
-          },
-          "isPending": true 
-        }}
+        }
       });
-
-      if (loading) return 'Submitting...';
-      if (error) return `Submission error! ${error.message}`;
 
     return (
     <>
         <form id="form"
-        onSubmit={e => {
-            e.preventDefault();
-            register();
+            onSubmit={e => {
+                e.preventDefault();
+                register();
           }}>
+
         <div className={styles.register}>
+
+        {loading ? 'Folyamatban...' : error ? `Folyamat hiba! ${error.message}` : <>
             <label htmlFor="username">Felhasználónév</label>
             <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} />
             {errorUserMsg === '' ? null : 
@@ -119,13 +120,15 @@ export default function Register() {
                     fontWeight: 'thin',
                     color: 'red',
                 }}>{errorUserMsg}</span>}
+
             <label htmlFor="email" className={styles.dist}>Email</label>
-            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value);setEmailInput(e.target.value)}} />
+            <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value); setEmailInput(e.target.value)}} />
             {errorEmailMsg === '' ? null : 
                 <span style={{
                         fontWeight: 'thin', 
                         color: 'red',
                 }}>{errorEmailMsg}</span>}
+
             <label htmlFor="password" className={styles.dist}>Jelszó</label>
             <input type="password" name="password" onChange={(p) => {validatePass(p.target.value); setPasswordInput(p.target.value)}} />
             {errorPassMsg === '' ? null :
@@ -133,6 +136,7 @@ export default function Register() {
                         fontWeight: 'thin',
                         color: 'red',
                 }}>{errorPassMsg}</span>}
+
             <label htmlFor="faj" className={styles.dist}>Faj</label>
             <select name="faj" onChange={(e) => {setValue(e.target.value)}}>
                     <option value="bat" >Denevérek</option>
@@ -172,6 +176,7 @@ export default function Register() {
             <div className={styles.button}>
                 <button disabled={toggleRegBtn}>Regisztrálok</button>
             </div>
+        </>}
         </div>
         </form>
     </>
