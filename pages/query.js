@@ -1,33 +1,44 @@
-import { useQuery, gql  } from '@apollo/client';
+import { useLazyQuery, gql  } from '@apollo/client';
 
 const GET_USERS = gql`
-query Users($where: UserWhereInput!) {
-  users(where: $where) {
+query Query {
+  users {
     name
     email
+    adminRole
+    userRole
+    race {
+      races
+      image {
+        url
+      }
+    }
   }
-}`
+}
+`;
 
 export default function Query() {
-    const { loading, error, data } = useQuery(GET_USERS,
-        {variables: {"where": {
-            "isUser": {
-              "equals": true
-            }
-          }}});
-    const {name, email} = data?.users || {};
+
+    const [ getUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
+
+    const {name, email, adminRole, userRole, race, races, image, url} = data?.users || {};
  
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
     
     return (
     <>
-    <div key={name}>
+    <div>
+      <button onClick={() => getUsers()}>Get Users!</button>
       <ol>
-        {data?.users.map((user) => (
+        {data && data?.users.map((user) => (
           <ol key={user.name}>
             <li>Name: {user.name}</li>
             <li>Email: {user.email}</li>
+            <li>adminRole: {user.adminRole === null ? 'Non': user.adminRole}</li>
+            <li>userRole: {user.userRole === null ? 'Non': user.userRole}</li>
+            <li>race: {user.race?.races}</li>
+            <li>image url: <a href={user.race?.image.url} target='_blank'>{user.race?.image.url}</a></li>
           </ol>
         ))}
       </ol>

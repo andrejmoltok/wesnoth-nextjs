@@ -15,10 +15,10 @@ mutation Register($data: UserCreateInput!) {
       race {
         races
       }
-      isPending
+      adminRole
+      userRole
     }
-  }
-    `;
+  }`;
 
 export default function Register() {
 
@@ -97,7 +97,8 @@ export default function Register() {
                         "name": value
                     }
                 },
-                "isPending": true 
+                "adminRole": null,
+                "userRole": "Pending",
             }
         }
       });
