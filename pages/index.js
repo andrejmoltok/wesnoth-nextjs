@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Image from "next/image"
 import styles from '../styles/Home.module.scss'
-import Register from '../components/register'
 import { ApolloProvider } from '@apollo/client';
 import client from "../apollo-client"
+import LoginReg from '../components/loginreg';
 import Query from '../components/query';
 
 
@@ -32,11 +32,16 @@ export default function App() {
         
       
       <div className={styles.tarthatter}>
-      <ApolloProvider client={client}>
-        {/* <Query /> */}
-        <div className={styles.loginreg}><Register /></div>
-      </ApolloProvider>
-      <div className={styles.kozep}>Hello</div>
+        <ApolloProvider client={client}>
+          <div className={styles.loginreg}>
+            <LoginReg />
+          </div>
+        </ApolloProvider>
+        <div className={styles.kozep}>
+          <div className={styles.tartszel}>
+            <div className={styles.tartkozep}></div>
+          </div>
+        </div>
       </div>
       
       <div className={styles.lablec}>

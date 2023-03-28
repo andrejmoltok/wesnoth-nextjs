@@ -48,10 +48,11 @@
   background-image: url('/tart-hatter.jpg');
   background-repeat: repeat-y;
   background-size: contain;
-  height: 150vh;
+  height: 200vh;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
   color: #bdb58c;
 }
 
@@ -61,10 +62,39 @@
 
 .loginreg {
   @include make-col(3);
+  margin: 10vh auto;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .kozep {
   @include make-col(8);
+  margin: 10vh auto;
+}
+
+.tartkozep {
+  margin: 0 auto;
+  position: inherit;
+  top: 17px;
+  left: 0px;
+  z-index: 2;
+  background-image: url('/tart-kozep.jpg');
+  background-size: 100% auto;
+  background-repeat: round;
+  height: 160vh;
+}
+
+.tartszel {
+  margin: 0 auto;
+  height: 178vh;
+  background-image: url('/tart-szel.jpg');
+  background-repeat: round;
+  background-size: 100% auto;
+  position: relative;
+  z-index: 1;
 }
 
 .lablec {
@@ -75,4 +105,38 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   height: 10vh;
+}
+
+
+@media (max-width: 870px) {
+  .loginreg {
+    display: none;
+  }
+  .kozep {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 1111px) {
+  .tartkozep {
+    height: 165vh;
+  }
+}
+
+@media (max-width: 780px) {
+  .tartkozep {
+    height: 163vh;
+  }
+}
+
+@media (max-width:650px) {
+  .tartkozep {
+    height: 165vh;
+  }
+}
+
+@media (max-width: 570px) {
+  .tartkozep {
+    height: 167vh;
+  }
 }

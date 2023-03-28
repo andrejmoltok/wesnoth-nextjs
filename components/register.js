@@ -105,7 +105,9 @@ export default function Register() {
 
     return (
     <>
-    {loading ? 'Folyamatban...' : error ? `Folyamat hiba! ${error.message}` :
+    {loading ? 
+        <div>Folyamatban...</div> : error ? 
+        <div>Folyamat hiba: {error.message}</div> :
     <div className={styles.register}>
         <form className={styles.form}
             onSubmit={e => {
@@ -113,8 +115,6 @@ export default function Register() {
                 register();
                 setValue('bat');
           }}>
-        
-        
             <div><label htmlFor="username">Felhasználónév:</label></div>
             <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} className={styles.username}/>
             {errorUserMsg === '' ? null : 
@@ -165,8 +165,6 @@ export default function Register() {
                     <option value="elf" >Tündék</option>
             </select>
             </div>
-            
-            
             <div className={styles.fajkep}>
                 {/* fajok képeit mutatja kattintásra a listából */}
                 <Image 
@@ -177,12 +175,9 @@ export default function Register() {
                     priority
                 />
             </div>
-            
             <div className={styles.button}>
                 <button disabled={toggleRegBtn}>Regisztrálok</button>
             </div>
-        
-            
         </form>
         </div>}
     </>
