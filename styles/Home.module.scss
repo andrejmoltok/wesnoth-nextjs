@@ -19,38 +19,25 @@
   padding: 0;
 }
 
+.fejlec {
+  @include make-col(10);
+  margin: 5vh auto 0 auto;
+  min-height: 270px;
+  background-size: 100% 100%;
+  background-image: url('/fejlec.jpg');
+}
+
 .logo {
-  @include make-col(12);
-  min-height: 40vh;
+  @include make-col(10);
+  margin: auto auto;
+  position: relative;
+  top: 17px;
+  min-height: 22vh;
   text-align: center;
 }
 
 .logo img {
-  margin: 20vh auto;
+  margin: auto auto;
   max-width: 100%;
-  height: auto;
-}
-
-.list {
-  @include make-col(12);
-}
-
-.list ul {
-  @extend .nav;
-  justify-content: center;
-  margin-top: 50px;
-}
-
-.list li {
-  list-style-type: none;
-  margin: 0 15px;
-}
-
-.list a {
-  @extend .btn;
-}
-
-.list li img {
-  margin: 0px 10px 0px 0px;
-  vertical-align: middle;
+  height: 90%;
 }

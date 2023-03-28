@@ -17,13 +17,11 @@ html, body {
 }
 
 body {
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      $background-end
-    )
-    $background-start;
-
+  background-image: url('/hatter.jpg');
+  background-origin: border-box;
+  background-size: contain;
+  background-repeat: repeat;
+  background-attachment: fixed;
   font-family: serif;
 }
 
