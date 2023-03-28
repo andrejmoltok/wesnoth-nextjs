@@ -50,7 +50,7 @@ export default function Register() {
           })) {
             setErrorUserMsg('')
         } else {
-            setErrorUserMsg('A felhasználónév nem lehet üres, 3-16 karakter közti hosszúságú kell legyen és csak betűket meg/vagy számokat tartalmazhat.')
+            setErrorUserMsg('A felhasználónév nem lehet üres, 3-16 karakter közti hosszúságú lehet, csak betűket és/vagy számokat tartalmazhat.')
             setToggleRegBtn(true)
         }
     }
@@ -80,7 +80,7 @@ export default function Register() {
                 setToggleRegBtn(false)
             }
         } else {
-            setErrorPassMsg('A jelszó 8-16 karakter közti hosszúságú kell legyen, minimum egy kicsi és egy nagy betűt, egy számot és szimbólumot kell tartalmaznia.')
+            setErrorPassMsg('A jelszó 8-16 karakter közti hosszúságú lehet, minimum egy kicsi és egy nagy betűt, egy számot és szimbólumot kell tartalmaznia.')
             setToggleRegBtn(true)
         }
     }
@@ -115,7 +115,7 @@ export default function Register() {
           }}>
         
         
-            <label htmlFor="username">Felhasználónév:</label>
+            <div><label htmlFor="username">Felhasználónév:</label></div>
             <input type="text" name="username" onChange={(u) => {validateUser(u.target.value); setUsernameInput(u.target.value)}} className={styles.username}/>
             {errorUserMsg === '' ? null : 
                 <span style={{
@@ -123,7 +123,7 @@ export default function Register() {
                     color: 'red',
                 }}>{errorUserMsg}</span>}
 
-            <label htmlFor="email" className={styles.dist}>Email:</label>
+            <div><label htmlFor="email" className={styles.dist}>Email:</label></div>
             <input type="email" name="email" onChange={(e) => {validateEmail(e.target.value); setEmailInput(e.target.value)}} className={styles.email}/>
             {errorEmailMsg === '' ? null : 
                 <span style={{
@@ -131,7 +131,7 @@ export default function Register() {
                         color: 'red',
                 }}>{errorEmailMsg}</span>}
 
-            <label htmlFor="password" className={styles.dist}>Jelszó:</label>
+            <div><label htmlFor="password" className={styles.dist}>Jelszó:</label></div>
             <input type="password" name="password" onChange={(p) => {validatePass(p.target.value); setPasswordInput(p.target.value)}} className={styles.password}/>
             {errorPassMsg === '' ? null :
                 <span style={{
@@ -139,7 +139,7 @@ export default function Register() {
                         color: 'red',
                 }}>{errorPassMsg}</span>}
             
-            <label htmlFor="faj" className={styles.dist}>Faj:</label>
+            <div><label htmlFor="faj" className={styles.dist}>Faj:</label></div>
             <div>
             <select name="faj" onChange={(e) => {setValue(e.target.value)}} className={styles.select}>
                     <option value="bat" >Denevérek</option>
