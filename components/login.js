@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation, useLazyQuery } from "@apollo/client"
 import styles from '../styles/Register.module.css';
 import { useState } from "react";
 import Image from 'next/image';
@@ -30,10 +30,19 @@ mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
 
 const EMAIL_CHECK = gql`
 query Query($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      email
+  user(where: $where) {
+    email
+    name
+    adminRole
+    userRole
+    race {
+      races
+      image {
+        url
+      }
     }
   }
+}
 `;
 
 export default function Login() {
@@ -43,21 +52,21 @@ export default function Login() {
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
 
-    const [ checkEmail, {loading, error} ] = useQuery(EMAIL_CHECK, {
-        variables: {
-            "where": {
-              "email": emailInput
-            }
+    const [ checkEmail, {loading, error, data} ] = useLazyQuery(EMAIL_CHECK, {
+      variables: {
+          "where": {
+            "email": emailInput
           }
+        }
     });
 
-    const [login, { data }] = useMutation(LOGIN, {
+    const [login] = useMutation(LOGIN, {
         variables: {
             "email": emailInput,
             "password": passwordInput,
         }
     });
-    const {name, email, adminRole, userRole, race, races, image, url, authenticateUserWithPassword, item, user} = data || {};
+    const {user, name, email, adminRole, userRole, race, races, image, url} = data?.user || {};
 
     return (
         <>
@@ -81,19 +90,19 @@ export default function Login() {
         </form>
         </div>
         </>}
-        {data?.user === null && <div>Hibás emailcím</div>}
-        {(data?.authenticateUserWithPassword.message) && <div>Hibás jelszó</div>}
-        {(data?.authenticateUserWithPassword.item) && (data?.user.email === emailInput) && <>
+        {(data?.user.email === emailInput) && (data?.user.userRole === 'Pending') && <div>Account not activated</div>}
+        {(data?.user === null) && <div>Hibás emailcím</div>}
+        {(data?.user.userRole !== 'Pending') && login && <>
+            <div>Username: {data?.user.name}</div>
+            <div>Email: {data?.user.email}</div>
+            <div>Role: {data?.user.adminRole !== null && data?.user.adminRole}
+                        {data?.user.userRole !== 'Pending' && data?.user?.userRole}</div>
+            <div>Race: {data?.user.race?.races}</div>
             <div><Image 
-                src={race.image.url}
-                width={72}
-                height={72}
-                priority    
-            /></div>
-            <div>Username: {name}</div>
-            <div>Email: {email}</div>
-            <div>Race: {race.races}</div>
-            <div>Role: {(adminRole !== null) && adminRole}{(userRole !== null) && userRole}</div>
+                    src={data?.user.race?.image.url}
+                    alt={`${data?.user.race?.races}`}
+                    width={72}
+                    height={72}/></div>
             </>}
         </>
     )
