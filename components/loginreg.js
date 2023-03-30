@@ -1,4 +1,5 @@
 import Register from "./register"
+import Login from './login';
 import { useState } from "react";
 
 export default function LoginReg() {
@@ -20,9 +21,11 @@ export default function LoginReg() {
         <>
             <div>
                 <button onClick={() => handleToggle("login")} disabled={isLoginActive}>Bejelentkezés</button>
+            </div>
+            <div>
                 <button onClick={() => handleToggle("register")} disabled={isRegisterActive}>Regisztráció</button>
             </div>
-            {isLoginActive && <div>Bejelentkezés űrlap</div>}
+            {isLoginActive && <Login />}
             {isRegisterActive && <Register />}
         </>
     );

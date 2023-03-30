@@ -1,4 +1,4 @@
-import { useLazyQuery, gql  } from '@apollo/client';
+import { useQuery, gql  } from '@apollo/client';
 
 const GET_USERS = gql`
 query Query {
@@ -19,7 +19,7 @@ query Query {
 
 export default function Query() {
 
-    const [ getUsers, { loading, error, data }] = useLazyQuery(GET_USERS);
+    const [ getUsers, { loading, error, data }] = useQuery(GET_USERS);
 
     const {name, email, adminRole, userRole, race, races, image, url} = data?.users || {};
  

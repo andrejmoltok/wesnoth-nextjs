@@ -48,7 +48,7 @@
   background-image: url('/tart-hatter.jpg');
   background-repeat: repeat-y;
   background-size: contain;
-  height: 200vh;
+  height: 100vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -56,23 +56,19 @@
   color: #bdb58c;
 }
 
-.loginreg, .kozep {
-  margin: auto;
-}
-
 .loginreg {
-  @include make-col(3);
-  margin: 10vh auto;
+  @include make-col(2);
+  margin: 3vh auto;
   height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 }
 
 .kozep {
-  @include make-col(8);
-  margin: 10vh auto;
+  @include make-col(9);
+  margin: 3vh auto;
 }
 
 .tartkozep {
@@ -84,12 +80,12 @@
   background-image: url('/tart-kozep.jpg');
   background-size: 100% auto;
   background-repeat: round;
-  height: 160vh;
+  height: 75vh;
 }
 
 .tartszel {
   margin: 0 auto;
-  height: 178vh;
+  height: 95vh;
   background-image: url('/tart-szel.jpg');
   background-repeat: round;
   background-size: 100% auto;
@@ -119,24 +115,12 @@
 
 @media (max-width: 1111px) {
   .tartkozep {
-    height: 165vh;
+    height: 80vh;
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width:625px) {
   .tartkozep {
-    height: 163vh;
-  }
-}
-
-@media (max-width:650px) {
-  .tartkozep {
-    height: 165vh;
-  }
-}
-
-@media (max-width: 570px) {
-  .tartkozep {
-    height: 167vh;
+    height: 85vh;
   }
 }
