@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.scss'
 import { ApolloProvider } from '@apollo/client';
 import client from "../apollo-client"
 import LoginReg from '../components/loginreg';
+import Query from '../components/query';
 
 
 export default function App() {
