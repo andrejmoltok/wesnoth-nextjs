@@ -57,16 +57,21 @@ export default function Login() {
           "where": {
             "email": emailInput
           }
+      },
+      onCompleted: (data) => {
+        if (data?.user.email === emailInput) {
+          login({ variables: { "email": emailInput, "password": passwordInput } });
         }
+      },
     });
 
+    const {name, email, adminRole, userRole, race, races, image, url} = data?.user || {};
+
     const [login] = useMutation(LOGIN, {
-        variables: {
-            "email": emailInput,
-            "password": passwordInput,
-        }
+      refetchQueries: [{query: EMAIL_CHECK}]
     });
-    const {user, name, email, adminRole, userRole, race, races, image, url} = data?.user || {};
+
+    
 
     return (
         <>
@@ -79,7 +84,7 @@ export default function Login() {
           }}>
         <div><label htmlFor="email" className={styles.dist}>Email:</label></div>
         <input type="email" name="email" onChange={(e) => {setEmailInput(e.target.value)}} className={styles.email}/>
-
+        
         <div><label htmlFor="password" className={styles.dist}>Jelszó:</label></div>
         <input type="password" name="password" onChange={(p) => {setPasswordInput(p.target.value)}} className={styles.password}/> 
         
@@ -90,17 +95,17 @@ export default function Login() {
         </form>
         </div>
         </>}
-        {(data?.user.email === emailInput) && (data?.user.userRole === 'Pending') && <div>Account not activated</div>}
+        {(email === emailInput) && (userRole === 'Pending') && <div>Account not activated</div>}
         {(data?.user === null) && <div>Hibás emailcím</div>}
-        {(data?.user.userRole !== 'Pending') && login && <>
-            <div>Username: {data?.user.name}</div>
-            <div>Email: {data?.user.email}</div>
-            <div>Role: {data?.user.adminRole !== null && data?.user.adminRole}
-                        {data?.user.userRole !== 'Pending' && data?.user?.userRole}</div>
-            <div>Race: {data?.user.race?.races}</div>
+        {(data) && (data?.user) && (userRole !== 'Pending' ) && <>
+            <div>Username: {name}</div>
+            <div>Email: {email}</div>
+            <div>Role: {adminRole !== null && adminRole}
+                        {userRole !== 'Pending' && userRole}</div>
+            <div>Race: {race?.races}</div>
             <div><Image 
-                    src={data?.user.race?.image.url}
-                    alt={`${data?.user.race?.races}`}
+                    src={race?.image.url}
+                    alt={`${race?.races}-icon`}
                     width={72}
                     height={72}/></div>
             </>}
