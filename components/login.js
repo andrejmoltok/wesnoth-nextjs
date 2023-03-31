@@ -1,24 +1,13 @@
-import { gql, useMutation, useLazyQuery } from "@apollo/client"
 import styles from '../styles/Register.module.css';
 import { useState } from "react";
 import Image from 'next/image';
+import { getCookies, setCookie, deleteCookie } from 'cookies-next';
+import { gql, useMutation, useLazyQuery } from "@apollo/client"
 
 const LOGIN = gql`
 mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       ... on UserAuthenticationWithPasswordSuccess {
-        item {
-          name
-          email
-          adminRole
-          userRole
-          race {
-            races
-            image {
-              url
-            }
-          }
-        }
         sessionToken
       }
       ... on UserAuthenticationWithPasswordFailure {
@@ -52,7 +41,11 @@ export default function Login() {
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
 
-    const [ checkEmail, {loading, error, data} ] = useLazyQuery(EMAIL_CHECK, {
+    const [login, {loading: authLoading, error: authError, data: authData}] = useMutation(LOGIN, {
+      variables: { "email": emailInput, "password": passwordInput }
+    });
+
+    const [ checkEmail, {loading: userLoading, error: userError, data: userData} ] = useLazyQuery(EMAIL_CHECK, {
       variables: {
           "where": {
             "email": emailInput
@@ -65,17 +58,14 @@ export default function Login() {
       },
     });
 
-    const {name, email, adminRole, userRole, race, races, image, url} = data?.user || {};
+    const {name, email, adminRole, userRole, race, races, image, url} = userData?.user || {};
 
-    const [login] = useMutation(LOGIN, {
-      refetchQueries: [{query: EMAIL_CHECK}]
-    });
+    const {item, sessionToken} = authData?.authenticateUserWithPassword || {};
 
-    
 
     return (
         <>
-        {(!data) && <>
+        {(!userData) && (!authData) && <>
         <div className={styles.register}>
         <form className={styles.form}
             onSubmit={e => {
@@ -96,8 +86,8 @@ export default function Login() {
         </div>
         </>}
         {(email === emailInput) && (userRole === 'Pending') && <div>Account not activated</div>}
-        {(data?.user === null) && <div>Hibás emailcím</div>}
-        {(data) && (data?.user) && (userRole !== 'Pending' ) && <>
+        {(userData?.user === null) && <div>Hibás emailcím</div>}
+        {(userData) && (userData?.user) && (userRole !== 'Pending' ) && <>
             <div>Username: {name}</div>
             <div>Email: {email}</div>
             <div>Role: {adminRole !== null && adminRole}
@@ -107,7 +97,8 @@ export default function Login() {
                     src={race?.image.url}
                     alt={`${race?.races}-icon`}
                     width={72}
-                    height={72}/></div>
+                    height={72}/>
+            </div>
             </>}
         </>
     )
