@@ -42,7 +42,8 @@ export default function Login() {
     var [passwordInput, setPasswordInput] = useState("");
 
     const [login, {loading: authLoading, error: authError, data: authData}] = useMutation(LOGIN, {
-      variables: { "email": emailInput, "password": passwordInput }
+      variables: { "email": emailInput, "password": passwordInput },
+      refetchQueries: [{ EMAIL_CHECK }],
     });
 
     const [ checkEmail, {loading: userLoading, error: userError, data: userData} ] = useLazyQuery(EMAIL_CHECK, {
@@ -51,16 +52,16 @@ export default function Login() {
             "email": emailInput
           }
       },
-      onCompleted: (data) => {
-        if (data?.user.email === emailInput) {
+      onCompleted: (userData) => {
+        if (userData.email === emailInput) {
           login({ variables: { "email": emailInput, "password": passwordInput } });
         }
       },
     });
 
-    const {name, email, adminRole, userRole, race, races, image, url} = userData?.user || {};
+    const {name, email, adminRole, userRole, race, races, image, url} = userData?.user || {}; //userData
 
-    const {item, sessionToken} = authData?.authenticateUserWithPassword || {};
+    const {item, sessionToken, message} = authData?.authenticateUserWithPassword || {}; //authData
 
 
     return (
@@ -99,7 +100,7 @@ export default function Login() {
                     width={72}
                     height={72}/>
             </div>
-            </>}
+        </>}
         </>
     )
 }

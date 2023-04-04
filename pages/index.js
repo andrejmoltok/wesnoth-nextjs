@@ -25,11 +25,11 @@ export default function App() {
                   width={415}
                   height={189}
                   priority
+                  className={styles.logoImg}
               />
           </div>
         </div>
         
-      
       <div className={styles.tarthatter}>
         <ApolloProvider client={client}>
           <div className={styles.loginreg}>
@@ -38,7 +38,9 @@ export default function App() {
         </ApolloProvider>
         <div className={styles.kozep}>
           <div className={styles.tartszel}>
-            <div className={styles.tartkozep}></div>
+            <div className={styles.tartkozep}>
+              
+            </div>
           </div>
         </div>
       </div>
