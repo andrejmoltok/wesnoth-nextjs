@@ -85,6 +85,7 @@
   background-image: url('/tart-kozep.jpg');
   background-size: 100% auto;
   background-repeat: round;
+  overflow: hidden;
   height: 75vh;
 }
 
@@ -95,6 +96,7 @@
   background-image: url('/tart-szel.jpg');
   background-repeat: space;
   background-size: 100% auto;
+  overflow: hidden;
   z-index: 1;
 }
 

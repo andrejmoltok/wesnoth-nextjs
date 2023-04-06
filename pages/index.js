@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import Image from "next/image"
 import styles from '../styles/Home.module.scss'
-import { ApolloProvider } from '@apollo/client';
 import client from "../apollo-client"
+import { ApolloProvider } from '@apollo/client'
 import LoginReg from '../components/loginreg';
-
+import Getposts from '../components/getposts';
 
 export default function App() {
   return (
@@ -15,7 +15,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+      <ApolloProvider client={client}>
       <main className={styles.main}>
         <div className={styles.fejlec}>
           <div className={styles.logo}>
@@ -31,15 +31,15 @@ export default function App() {
         </div>
         
       <div className={styles.tarthatter}>
-        <ApolloProvider client={client}>
+        
           <div className={styles.loginreg}>
             <LoginReg />
           </div>
-        </ApolloProvider>
+        
         <div className={styles.kozep}>
           <div className={styles.tartszel}>
             <div className={styles.tartkozep}>
-              
+              <Getposts />
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function App() {
         <div></div>
       </div>
       </main>
-      
+      </ApolloProvider>
       </>
   )
 }

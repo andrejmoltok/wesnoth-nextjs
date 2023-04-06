@@ -1,0 +1,27 @@
+.posts {
+    margin: 0px 25px;
+    color: black;
+    
+}
+
+.focim {
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.focimAdatok {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.document {
+    height: 100px;
+    margin-bottom: 75px;
+    white-space: nowrap;
+    overflow: hidden;
+}
