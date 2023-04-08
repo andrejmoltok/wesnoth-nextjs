@@ -36,12 +36,14 @@ export default function App() {
             <LoginReg />
           </div>
         
+        
         <div className={styles.kozep}>
-          <div className={styles.tartszel}>
-            <div className={styles.tartkozep}>
-              <Getposts />
-            </div>
+        <div className={styles.tartkozep}>
+            <Getposts />
           </div>
+          <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
+          
+          <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
         </div>
       </div>
       

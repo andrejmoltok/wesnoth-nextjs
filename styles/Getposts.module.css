@@ -10,6 +10,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    gap: 15px;
 }
 
 .focimAdatok {
@@ -21,7 +22,28 @@
 
 .document {
     height: 100px;
-    margin-bottom: 75px;
-    white-space: nowrap;
+    margin-bottom: 40px;
     overflow: hidden;
+}
+
+.pagination {
+    margin: auto;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid black;
+}
+
+.page {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 2px 5px;
+    color: black;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
 }
