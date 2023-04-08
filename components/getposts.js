@@ -18,6 +18,7 @@ query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
         image {
           url
         }
+        races
       }
     }
     createdAt
@@ -37,6 +38,7 @@ query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
         image {
           url
         }
+        races
       }
     }
     createdAt
@@ -84,7 +86,9 @@ export default function Getposts() {
       pollInterval: 1000
     });
 
-    const {content, document,type,children,text,title,author,name,race,image,url,createdAt} = postData?.posts || {};
+    const {content, document,type,children,text,title,author,name,race,races,image,url,createdAt} = postData?.posts || pagerData?.posts || {};
+
+    // const {content, document,type,children,text,title,author,name,race,image,url,createdAt} = pagerData?.posts || {};
 
     const {} = pageData?.posts || {};
 
@@ -92,14 +96,16 @@ export default function Getposts() {
 
     return (
         <>
+        {/* Automatic first load of Posts with normal useQuery */}
         {postData?.posts.map((v,i) => {return (
         <div className={styles.posts} key={i}>
           <div className={styles.focim}>
-            <div><Image 
-            src={v?.author?.race?.image.url}
-            width={72}
-            height={72}
-            alt={'race-image'}/>
+            <div>
+              <Image 
+                src={v?.author?.race?.image.url}
+                width={72}
+                height={72}
+                alt={`${v?.author?.race?.races} icon`}/>
             </div>
             <div className={styles.focimAdatok}>
               <div><h2>{v?.title}</h2></div>
@@ -111,12 +117,12 @@ export default function Getposts() {
           <DocumentRenderer document={v?.content.document}/>
           </div>
         </div>)})}
+        {/* Oldalászámozás */}
         <div className={styles.pagination}>
           {pageData?.posts.length % 2 === 0 ? <>{range(1,((pageData?.posts.length)/2)).map((v,i,a) => (
             <><div className={styles.page}>{v}</div></>))}</> : <>{range(1,Math.ceil((pageData?.posts.length)/2)).map((v,i,a) => (
               <><div className={styles.page}>{v}</div></>))}</>}
         </div>
-        {console.log(((pageData?.posts.length)/2))}
         </>
     )
 
