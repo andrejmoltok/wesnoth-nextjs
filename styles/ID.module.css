@@ -1,6 +1,9 @@
 .posts {
     margin: 0px 25px;
     color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .pager {
@@ -28,12 +31,14 @@
 }
 
 .document {
-    max-height: 400px;
-    margin-bottom: 40px;
+    height: 240px;
+    margin-bottom: 20px;
     overflow-y: scroll;
 }
 
 .comment {
+    width: 100%;
+    max-width: 660px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -41,10 +46,28 @@
     align-items: center;
 }
 
-.commenttext {
-    background-color: transparent;
+.writeBtn {
     width: 100%;
     max-width: 650px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    cursor: pointer;
+}
+
+.commentText {
+    background-color: transparent;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 650px;
+    height: 0px;
+    opacity: 0;
+}
+
+.commentTextExpand {
+    height: 80px;
+    transition: height 0.5s ease-in-out;
+    background-color: transparent;
     border-radius: 5px;
 }
 
@@ -55,8 +78,15 @@
     justify-content: flex-end;
 }
 
-.submitBtn {
-    margin: 10px 15px 0px 0px;
+.submitBtnHidden {
+    opacity: 0;
+    height: 0;
+}
+
+.submitBtnVisible {
+    margin: 0px;
     border: 1px solid gray;
     border-radius: 5px;
+    height: 24px;
+    opacity: 1;
 }

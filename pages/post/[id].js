@@ -2,10 +2,13 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../../styles/Home.module.scss';
 import styler from '../../styles/ID.module.css';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { gql, useQuery, ApolloProvider } from '@apollo/client';
 import client from '../../apollo-client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare, faFeather, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 
 
 const QUERY_POST_BY_ID = gql`
@@ -40,6 +43,8 @@ function GetPost() {
 
   const {title, content, document, author, name, race, races, image, url, createdAt} = data?.post || {};
 
+  const [isWrite, setIsWrite] = useState(false);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -62,8 +67,10 @@ function GetPost() {
             </div>
             <div className={styler.focimAdatok}>
               <div><h2>{title}</h2></div>
-              <div>Szerző: {author?.name}</div>
-              <div style={{fontSize: '14px'}}>Dátum: {createdAt?.slice(0,10)}</div>
+              <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
+              <div style={{fontSize: '14px'}}>
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0,10)}
+              </div>
             </div>
           </div>
           
@@ -72,11 +79,21 @@ function GetPost() {
           </div>
 
           <div className={styler.comment}>
-            <textarea className={styler.commenttext}>
+            <div className={styler.writeBtn} onClick={() => {setIsWrite(!isWrite)}}>
+              <div><FontAwesomeIcon icon={faPenToSquare} size="sm"/> Komment írása</div>
+            </div>
+            <div>
+            <textarea 
+              autofocus
+              rows="3" cols="80"
+              className={isWrite ? styler.commentTextExpand : styler.commentText}
+            >
             </textarea>
             <div className={styler.submit}>
-              <div className={styler.submitBtn}>Küldés</div>
+              <div className={isWrite ? styler.submitBtnVisible : styler.submitBtnHidden}>Küldés</div>
             </div>
+            </div>
+            
           </div>
         </div>
         
