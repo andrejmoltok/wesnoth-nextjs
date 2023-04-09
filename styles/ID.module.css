@@ -28,28 +28,35 @@
 }
 
 .document {
-    height: 100px;
+    max-height: 400px;
     margin-bottom: 40px;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
-.pagination {
-    margin: auto auto;
-    width: 250px;
+.comment {
+    margin: auto;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
 }
 
-.page {
-    border: 1px solid black;
+.commenttext {
+    background-color: transparent;
+    width: 100%;
+    max-width: 650px;
     border-radius: 5px;
-    padding: 2px 5px;
-    color: black;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
+}
+
+.submit {
+    width: 650px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.submitBtn {
+    margin: 10px 15px 0px 0px;
+    border: 1px solid gray;
+    border-radius: 5px;
 }
