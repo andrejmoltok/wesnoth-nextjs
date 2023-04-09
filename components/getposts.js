@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Getposts.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFeather, faCalendarDays, faListOl } from '@fortawesome/free-solid-svg-icons'
 
 const QUERY_POSTS_LAZY = gql`
 query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
@@ -23,6 +25,7 @@ query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
     }
     createdAt
     id
+    commentsCount
   }
 }`;
 
@@ -51,10 +54,10 @@ export default function Getposts() {
 
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
     {
-      pollInterval: 1000,
+      pollInterval: 60000,
     });
 
-    const {content,document,type,children,text,id,title,author,name,race,races,image,url,createdAt} = pagerData?.posts || {};
+    const {commentsCount,content,document,type,children,text,id,title,author,name,race,races,image,url,createdAt} = pagerData?.posts || {};
 
     const {} = pageData?.posts || {};
 
@@ -79,8 +82,11 @@ export default function Getposts() {
             </div>
             <div className={styles.focimAdatok}>
               <div><Link href={`/post/${v?.id}`} key={i}><h2>{v?.title}</h2></Link></div>
-              <div>Szerző: {v?.author?.name}</div>
-              <div style={{fontSize: '14px'}}>Dátum: {v?.createdAt.slice(0,10)}</div>
+              <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
+              <div>
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)}
+              </div>
+              <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {v?.commentsCount}</div>
             </div>
           </div>
           <div className={styles.document}>

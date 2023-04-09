@@ -4,14 +4,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.pager {
-    min-height: 487px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
+    border: 3px solid #9b1d20ff;
+    border-radius: 5px;
 }
 
 .focim {
@@ -32,13 +26,21 @@
 
 .document {
     height: 240px;
-    margin-bottom: 20px;
     overflow-y: scroll;
+}
+
+.postStat {
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    
 }
 
 .comment {
     width: 100%;
-    max-width: 660px;
+    max-width: 860px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -48,45 +50,92 @@
 
 .writeBtn {
     width: 100%;
-    max-width: 650px;
+    max-width: 105px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     cursor: pointer;
 }
 
+.commentView {
+    cursor: pointer;
+}
+
 .commentText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.commentTextHidden {
     background-color: transparent;
     border-radius: 5px;
     width: 100%;
     max-width: 650px;
     height: 0px;
     opacity: 0;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
 .commentTextExpand {
     height: 80px;
-    transition: height 0.5s ease-in-out;
+    opacity: 1;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     background-color: transparent;
     border-radius: 5px;
+    width: 100%;
+    max-width: 650px;
 }
 
-.submit {
+.submitVisible {
     width: 650px;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    height: 44px;
+    opacity: 1;
+    height: 44px;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.submitHidden {
+    width: 650px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    height: 0px;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
 }
 
 .submitBtnHidden {
     opacity: 0;
     height: 0;
+    margin: 5px 0px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px 5px;
+    height: 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
 .submitBtnVisible {
-    margin: 0px;
+    margin: 5px 0px;
     border: 1px solid gray;
     border-radius: 5px;
-    height: 24px;
+    padding: 5px 5px;
+    height: 34px;
     opacity: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }

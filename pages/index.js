@@ -31,9 +31,9 @@ export default function App() {
         </div>
         
       <div className={styles.tarthatter}>
-          {/* <div className={styles.loginreg}>
+          <div className={styles.loginreg}>
             <LoginReg />
-          </div> */}
+          </div>
         <div className={styles.kozep}>
         <div className={styles.tartkozep}>
             <Getposts />
