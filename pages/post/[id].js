@@ -90,7 +90,8 @@ function GetPost() {
               <div className={styler.writeBtn} onClick={() => {setIsWrite(!isWrite)}}>
                 <div><FontAwesomeIcon icon={faPenToSquare} size="sm"/> Hozzászólok</div>
               </div>
-              <div className={styler.commentView} onClick={() => {setIsView(!isView)}}><FontAwesomeIcon icon={faBookOpenReader} size="sm" /> Hozzászólások megtekintése</div>
+              <div className={styler.commentView} onClick={() => {setIsView(!isView)}}>
+                <FontAwesomeIcon icon={faBookOpenReader} size="sm" /> Hozzászólások megtekintése</div>
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {commentsCount}</div>
             </div> {/* postStat END */}
             <div className={styler.commentText}>

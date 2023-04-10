@@ -71,7 +71,8 @@ export default function Getposts() {
         <>
         {/* Automatic first load of Posts with normal useQuery */}
         {pagerData?.posts.map((v,i) => {return (
-        <div className={styles.posts} key={i}>
+        <div key={i}>
+        <div className={styles.posts}>
           <div className={styles.focim}>
             <div>
               <Image 
@@ -92,6 +93,7 @@ export default function Getposts() {
           <div className={styles.document}>
           <DocumentRenderer document={v?.content.document}/>
           </div>
+        </div>
         </div>)})}
 
         {/* Komment szekcio */}

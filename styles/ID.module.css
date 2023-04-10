@@ -25,6 +25,7 @@
 }
 
 .document {
+    margin: 10px 25px;
     height: 240px;
     overflow-y: scroll;
 }
@@ -34,13 +35,12 @@
     max-width: 650px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    
+    justify-content: space-evenly; 
 }
 
 .comment {
     width: 100%;
-    max-width: 860px;
+    max-width: 650px;
     margin: auto;
     display: flex;
     flex-direction: column;

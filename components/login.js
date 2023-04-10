@@ -54,7 +54,24 @@ export default function Login() {
       },
       onCompleted: (userData) => {
         if (userData.email === emailInput) {
-          login({ variables: { "email": emailInput, "password": passwordInput } });
+          fetch('http://localhost:3000/api/graphql', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Set-Cookie': 'SameSite=None; Secure',
+              'Access-Control-Allow-Origin': 'https://sandbox.embed.apollographql.com',
+              'Access-Control-Allow-Credentials': true,
+            },
+            mode: 'cors',
+            body: JSON.stringify({
+              query: LOGIN,
+              variables:  { "email": emailInput, "password": passwordInput } 
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error(error));
+          
         }
       },
     });
