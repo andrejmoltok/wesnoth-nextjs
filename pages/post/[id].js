@@ -4,7 +4,7 @@ import styles from '../../styles/Home.module.scss';
 import styler from '../../styles/ID.module.css';
 import LoginReg from '../../components/loginreg';
 import CommentView from '../../components/commentview';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { gql, useQuery, ApolloProvider } from '@apollo/client';
 import client from '../../apollo-client';
@@ -51,6 +51,13 @@ function GetPost() {
 
   const [isWrite, setIsWrite] = useState(false);
   const [isView, setIsView] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 240,
+      behavior: 'smooth',
+    })
+  },[])
 
   if (loading) {
     return <div>Loading...</div>;

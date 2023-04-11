@@ -82,7 +82,7 @@ export default function Getposts() {
                 alt={`${v?.author?.race?.races} icon`}/>
             </div>
             <div className={styles.focimAdatok}>
-              <div><Link href={`/post/${v?.id}`} key={i}><h2>{v?.title}</h2></Link></div>
+              <div><Link href={`/post/${v?.id}`} key={i} scroll={false}><h2>{v?.title}</h2></Link></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
               <div>
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)}
