@@ -1,35 +1,19 @@
 import styles from '../styles/Register.module.css';
-import { useState } from "react";
+import Profile from '../components/profile';
+import { useEffect, useState } from "react";
 import Image from 'next/image';
-import { getCookies, setCookie, deleteCookie } from 'cookies-next';
-import { gql, useMutation, useLazyQuery } from "@apollo/client"
+import { gql, useMutation, useLazyQuery } from "@apollo/client";
+import { setCookie, hasCookie, getCookie, deleteCookie } from 'cookies-next';
 
 const LOGIN = gql`
 mutation ($email: String!, $password: String!) {
   authenticate: authenticateUserWithPassword(email: $email, password: $password) {
     ... on UserAuthenticationWithPasswordSuccess {
       sessionToken
-      __typename
-      item {
-        name
-        email
-        id
-        race {
-          races
-          image {
-            url
-          }
-          __typename
-        }
-        adminRole
-        userRole
-      }
     }
     ... on UserAuthenticationWithPasswordFailure {
       message
-      __typename
     }
-    __typename
   }
 }
 `;
@@ -38,18 +22,7 @@ const EMAIL_CHECK = gql`
 query Query($where: UserWhereUniqueInput!) {
   user(where: $where) {
     email
-    name
-    adminRole
     userRole
-    race {
-      races
-      image {
-        url
-      }
-    }
-    isAdmin
-    isEditor
-    isUser
     id
   }
 }
@@ -62,49 +35,50 @@ export default function Login() {
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
 
-    const [login, {loading: authLoading, error: authError, data}] = useMutation(LOGIN, {
-      variables: { "email": `${emailInput}`, "password": `${passwordInput}` },
+    const [login, {loading: authLoading, error: authError, data: authData}] = useMutation(LOGIN, {
+      variables: { "email": emailInput, "password": passwordInput },
     });
 
     const [ checkEmail, {loading: userLoading, error: userError, data: userData} ] = useLazyQuery(EMAIL_CHECK, {
       variables: {
           "where": {
-            "email": `${emailInput}`
+            "email": emailInput
           }
       },
-      onCompleted: (userData) => {
-        if (userData.email === `${emailInput}`) {
-          login({variables: { "email": `${emailInput}`, "password": `${passwordInput}` }});
-          
-        }
-      },
+      fetchPolicy: 'cache-and-network',
     });
 
-    const {name, email, adminRole, userRole, race, races, image, url, isAdmin, isEditor, isUser, id} = userData?.user || {}; //userData
+    const {email, userRole, id} = userData?.user || {}; //userData
 
-    const {sessionToken, item, message } = data?.authenticate || {}; //authData
+    const {sessionToken} = authData?.authenticate || {}; //authData
 
-    setCookie('id', id);
-    setCookie('session', sessionToken);
-
-    if (authError) {return <>Authentication Error</>}
+    function cookieSetter() {
+      if (hasCookie('id') && hasCookie('keystonejs-session')) {
+        return
+      } else if (authData?.authenticate) {
+        setCookie('id', id);
+        setCookie('keystonejs-session', sessionToken);
+      }
+    };
 
     return (
         <>
         
-        {(!userData) && (!data) && <>
+        {(!userData) && (!authData) && <>
         <div className={styles.register}>
         <form className={styles.form}
             onSubmit={e => {
                 e.preventDefault();
                 checkEmail();
+                login();
+                
           }}>
         <div><label htmlFor="email" className={styles.dist}>Email:</label></div>
-        <input type="email" name="email" onChange={(e) => {setEmailInput(e.target.value),console.log(e.target.value)}} className={styles.email}/>
-        {}
+        <input type="email" name="email" onChange={(e) => {setEmailInput(e.target.value)}} className={styles.email}/>
+        
         <div><label htmlFor="password" className={styles.dist}>Jelszó:</label></div>
-        <input type="password" name="password" onChange={(p) => {setPasswordInput(p.target.value),console.log(p.target.value)}} className={styles.password}/> 
-        {}
+        <input type="password" name="password" onChange={(p) => {setPasswordInput(p.target.value)}} className={styles.password}/> 
+        
         <div className={styles.button}>
             <button>Bejelentkezés</button>
         </div>
@@ -112,10 +86,11 @@ export default function Login() {
         </form>
         </div>
         </>}
-        {console.log(data?.authenticate.sessionToken)}
         {(email === emailInput) && (userRole === 'Pending') && <div>Account not activated</div>}
         {(userData?.user === null) && <div>Hibás emailcím</div>}
-        {(userData) && (userData?.user) && (userRole !== 'Pending' ) && <>
+        {(authData?.authenticate) && <Profile />}
+        {(authData?.authenticate) && cookieSetter()}
+        {/* {(userData) && (userData?.user) && (userRole !== 'Pending' ) && <>
             <div>Username: {name}</div>
             <div>Email: {email}</div>
             <div>Role: {adminRole !== null && adminRole}
@@ -128,7 +103,7 @@ export default function Login() {
                     height={72}/>
             </div>
             
-        </>}
+        </>} */}
         </>
     )
 }
