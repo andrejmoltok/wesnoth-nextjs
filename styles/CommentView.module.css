@@ -30,7 +30,6 @@
 
 .document {
     height: 100px;
-    margin-left: 50px;
-    margin-bottom: 20px;
+    margin: 0px 5px 20px 50px;
     overflow-y: scroll;
 }

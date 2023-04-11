@@ -3,7 +3,7 @@ import Image from "next/image"
 import styles from '../styles/Home.module.scss'
 import client from "../apollo-client"
 import { ApolloProvider } from '@apollo/client'
-import LoginReg from '../components/loginreg';
+// import LoginReg from '../components/loginreg';
 import Getposts from '../components/getposts';
 
 export default function App() {
@@ -28,19 +28,27 @@ export default function App() {
                   className={styles.logoImg}
               />
           </div>
+          <div className={styles.navbar}>
+                <div className={styles.navbarText}>Főoldal</div>
+                <div className={styles.navbarText}>Profil</div>
+                <div className={styles.navbarText}>Cikkek</div>
+                <div className={styles.navbarText}>Fórum</div>
+          </div>
         </div>
         
       <div className={styles.tarthatter}>
-          <div className={styles.loginreg}>
-            <LoginReg />
+          <div className={styles.sideProfile}>
+            
           </div>
         <div className={styles.kozep}>
-        <div className={styles.tartkozep}>
-            <Getposts />
+          <div className={styles.tartszelTarto}>
+            <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
+            
+            <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
           </div>
-          <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
-          
-          <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
+          <div className={styles.tartkozep}>
+              <Getposts />
+            </div>
         </div>
       </div>
       

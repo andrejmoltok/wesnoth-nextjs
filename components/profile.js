@@ -45,8 +45,8 @@ export default function Profile() {
 
     return (
         <>
-            <div>This is your profile</div>
-            <div>{name}</div>
+            {(!getID) && <div>You're not logged in</div>}
+            {(getID) && <div>Logged in</div>}
         </>
     )
 }

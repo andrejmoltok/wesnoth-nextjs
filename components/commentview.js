@@ -58,6 +58,7 @@ export default function CommentView({id}) {
                     <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt?.slice(0,10)}
                   </div>
                 </div>
+                {/* Delete icon <FontAwesomeIcon icon={faTrashCan} size="sm" /> */}
             </div>
             <div className={styler.document}>
               <DocumentRenderer document={v?.content?.document}/>

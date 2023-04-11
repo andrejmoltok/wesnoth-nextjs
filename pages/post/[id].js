@@ -2,8 +2,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../../styles/Home.module.scss';
 import styler from '../../styles/ID.module.css';
-import LoginReg from '../../components/loginreg';
 import CommentView from '../../components/commentview';
+import CommentWrite from '../../components/commentWrite';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { gql, useQuery, ApolloProvider } from '@apollo/client';
@@ -44,7 +44,8 @@ function GetPost() {
   const router = useRouter();
   const { id } = router.query;
   const {data, loading, error} = useQuery(QUERY_POST_BY_ID,{
-    variables: { "where": { "id": id }}
+    variables: { "where": { "id": id }},
+    pollInterval: 500
   });
 
   const {title, content, document, author, name, race, races, image, url, createdAt, commentsCount} = data?.post || {};
@@ -60,11 +61,11 @@ function GetPost() {
   },[])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div style={{color: 'black'}} >Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div style={{color: 'black'}}>Error: {error.message}</div>;
   }
 
     return (
@@ -102,17 +103,9 @@ function GetPost() {
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {commentsCount}</div>
             </div> {/* postStat END */}
             <div className={styler.commentText}>
-              <textarea 
-                autoFocus
-                rows="3" cols="80"
-                className={isWrite ? styler.commentTextExpand : styler.commentTextHidden}
-              >
-              </textarea>
-              <div className={isWrite ? styler.submitVisible : styler.submitHidden}>
-                <div className={isWrite ? styler.submitBtnVisible : styler.submitBtnHidden}>Küldés</div>
-              </div>
+              <CommentWrite isWrite={isWrite} id={id}/>
             </div> {/* commentText END */}
-            {isView && <CommentView id={id}/>}
+            {isView && <CommentView id={id} />}
           </div> {/* comment END */}
         </div>
         
@@ -144,23 +137,30 @@ export default function ID() {
                     priority
                     className={styles.logoImg}
                 />
-            </div>
-          </div>
-          
-        <div className={styles.tarthatter}>
-            <div className={styles.loginreg}>
-              <LoginReg />
-            </div>
-          <div className={styles.kozep}>
-          <div className={styles.tartkozep}>
-          <ApolloProvider client={client}>
-              <GetPost/>
-        </ApolloProvider>
-          </div>
-            <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
-            <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
+                      </div>
+          <div className={styles.navbar}>
+                <div className={styles.navbarText}>Főoldal</div>
+                <div className={styles.navbarText}>Profil</div>
+                <div className={styles.navbarText}>Cikkek</div>
+                <div className={styles.navbarText}>Fórum</div>
           </div>
         </div>
+        
+      <div className={styles.tarthatter}>
+          <div className={styles.sideProfile}>
+            
+          </div>
+        <div className={styles.kozep}>
+          <div className={styles.tartszelTarto}>
+            <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
+            
+            <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
+          </div>
+          <div className={styles.tartkozep}>
+              <GetPost />
+            </div>
+        </div>
+      </div>
         
         <div className={styles.lablec}>
           <div></div>
