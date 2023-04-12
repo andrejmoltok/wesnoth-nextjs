@@ -54,7 +54,7 @@ export default function Getposts() {
 
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
     {
-      pollInterval: 60000,
+      pollInterval: 1000,
     });
 
     const {commentsCount,content,document,type,children,text,id,title,author,name,race,races,image,url,createdAt} = pagerData?.posts || {};
@@ -85,7 +85,7 @@ export default function Getposts() {
               <div><Link href={`/post/${v?.id}`} key={i} scroll={false}><h2>{v?.title}</h2></Link></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
               <div>
-                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)}
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {v?.createdAt.slice(11,19)}
               </div>
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {v?.commentsCount}</div>
             </div>

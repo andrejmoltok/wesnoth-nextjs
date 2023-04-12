@@ -4,10 +4,13 @@ import styles from '../../styles/Home.module.scss';
 import styler from '../../styles/ID.module.css';
 import CommentView from '../../components/commentview';
 import CommentWrite from '../../components/commentWrite';
+import Login from '../../components/login';
+import Profile from '../../components/profile';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { gql, useQuery, ApolloProvider } from '@apollo/client';
 import client from '../../apollo-client';
+import { hasCookie, setCookie, getCookie, deleteCookie } from 'cookies-next';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, 
@@ -61,11 +64,11 @@ function GetPost() {
   },[])
 
   if (loading) {
-    return <div style={{color: 'black'}} >Loading...</div>;
+    return <div style={{color: 'black', marginLeft: '35px'}}>Betöltés...</div>;
   }
 
   if (error) {
-    return <div style={{color: 'black'}}>Error: {error.message}</div>;
+    return <div style={{color: 'black', marginLeft: '35px'}}>Hiba: {error.message}</div>;
   }
 
     return (
@@ -84,7 +87,7 @@ function GetPost() {
               <div><h2>{title}</h2></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
               <div>
-                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0,10)}
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0,10)} {createdAt?.slice(11,19)}
               </div>
             </div>
           </div>
@@ -115,7 +118,18 @@ function GetPost() {
 }
 
 export default function ID() {
+
+    const [cookieSetting, setCookieSetting] = useState(false);
+
+    const router = useRouter();
     
+    useEffect(() => {
+      getCookie('id') !== undefined ? setCookieSetting(!cookieSetting) : null;
+    }, []);
+
+    const handleHome = () => {
+      router.push(`/`);
+    }
 
     return (
         <>
@@ -139,7 +153,7 @@ export default function ID() {
                 />
                       </div>
           <div className={styles.navbar}>
-                <div className={styles.navbarText}>Főoldal</div>
+                <div className={styles.navbarText} onClick={() => {handleHome}}>Főoldal</div>
                 <div className={styles.navbarText}>Profil</div>
                 <div className={styles.navbarText}>Cikkek</div>
                 <div className={styles.navbarText}>Fórum</div>
@@ -148,7 +162,7 @@ export default function ID() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            
+            {cookieSetting ? <Profile /> : <Login />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartszelTarto}>

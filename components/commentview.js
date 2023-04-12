@@ -55,7 +55,7 @@ export default function CommentView({id}) {
                 <div className={styler.focimAdatok}>
                   <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
                   <div>
-                    <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt?.slice(0,10)}
+                    <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt?.slice(0,10)} {v?.createdAt.slice(11,19)}
                   </div>
                 </div>
                 {/* Delete icon <FontAwesomeIcon icon={faTrashCan} size="sm" /> */}

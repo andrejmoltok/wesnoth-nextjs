@@ -45,8 +45,8 @@ export default function Profile() {
 
     return (
         <>
-            {(!getID) && <div>You're not logged in</div>}
-            {(getID) && <div>Logged in</div>}
+            {(getID === "") && <div>You're not logged in</div>}
+            {(getID) && <div>{name} is logged in</div>}
         </>
     )
 }
