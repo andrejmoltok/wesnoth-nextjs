@@ -72,7 +72,7 @@ export default function Getposts() {
         {/* Automatic first load of Posts with normal useQuery */}
         {pagerData?.posts.map((v,i) => {return (
         <div key={i}>
-        <div className={styles.posts}>
+        <div key={i} className={styles.posts}>
           <div className={styles.focim}>
             <div>
               <Image 
@@ -82,7 +82,7 @@ export default function Getposts() {
                 alt={`${v?.author?.race?.races} icon`}/>
             </div>
             <div className={styles.focimAdatok}>
-              <div><Link href={`/post/${v?.id}`} key={i} scroll={false}><h2>{v?.title}</h2></Link></div>
+              <div><Link href={`/post/${v?.id}`} scroll={false}><h2>{v?.title}</h2></Link></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
               <div>
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {v?.createdAt.slice(11,19)}
@@ -90,7 +90,7 @@ export default function Getposts() {
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {v?.commentsCount}</div>
             </div>
           </div>
-          <div className={styles.document}>
+          <div key={i} className={styles.document}>
           <DocumentRenderer document={v?.content.document}/>
           </div>
         </div>

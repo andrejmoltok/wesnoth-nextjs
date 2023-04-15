@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import Login from '../components/login';
 import Cookies from 'universal-cookie';
@@ -23,6 +23,18 @@ query QUERY_PROFILE_INFO($where: UserWhereUniqueInput!) {
   }
 `;
 
+const LOGGER = gql`
+mutation Mutation($data: LogCreateInput!) {
+  createLog(data: $data) {
+    who
+    what {
+      document
+    }
+    when
+  }
+}
+`;
+
 export default function Profile() {
 
     const [getID, setGetID] = useState("");
@@ -30,10 +42,47 @@ export default function Profile() {
     const cookies = new Cookies();
 
     useEffect(() => {
-     
       const cookieValue = cookies.get("id");
       setGetID(cookieValue);
     }, [setGetID]);
+
+    const { data, loading, error} = useQuery(QUERY_PROFILE_INFO_BY_ID, {
+        variables: {
+            "where": {
+                "id": getID
+            }
+        },
+        pollInterval: 100
+    });
+
+    const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
+
+    const [setName,setSetName] = useState("");
+
+    useEffect(() => {
+      if (data?.user) {
+        setSetName(name);
+        activity();
+      }
+    },[]);
+
+    const [activity, { loading: loggerLoading, error: loggerError, data: loggerData }] = useMutation(LOGGER, {
+      variables: {
+        "data": {
+          "who": setName,
+          "what": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Kijelentkezett"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    });
 
     const handleLogout = () => {
       cookies.remove('id', {
@@ -46,17 +95,6 @@ export default function Profile() {
       });
       setGetID(!getID);
     };
-
-    const { data, loading, error} = useQuery(QUERY_PROFILE_INFO_BY_ID, {
-        variables: {
-            "where": {
-                "id": getID
-            }
-        },
-        pollInterval: 100
-    });
-
-    const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
 
     return (
         <>

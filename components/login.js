@@ -1,8 +1,7 @@
 import styles from '../styles/Register.module.css';
 import Profile from '../components/profile';
 import { useEffect, useState } from "react";
-import Image from 'next/image';
-import { gql, useMutation, useLazyQuery } from "@apollo/client";
+import { gql, useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import Cookies from 'universal-cookie';
 
 const LOGIN = gql`
@@ -21,9 +20,22 @@ mutation ($email: String!, $password: String!) {
 const EMAIL_CHECK = gql`
 query Query($where: UserWhereUniqueInput!) {
   user(where: $where) {
+    name
     email
     userRole
     id
+  }
+}
+`;
+
+const LOGGER = gql`
+mutation Mutation($data: LogCreateInput!) {
+  createLog(data: $data) {
+    who
+    what {
+      document
+    }
+    when
   }
 }
 `;
@@ -35,23 +47,47 @@ export default function Login() {
     // password input value
     var [passwordInput, setPasswordInput] = useState("");
 
+    // LOGIN Mutation
     const [login, {loading: authLoading, error: authError, data: authData}] = useMutation(LOGIN, {
       variables: { "email": emailInput, "password": passwordInput },
     });
 
+    // EMAIL verification query
     const [ checkEmail, {loading: userLoading, error: userError, data: userData} ] = useLazyQuery(EMAIL_CHECK, {
       variables: {
           "where": {
             "email": emailInput
           }
       },
-      fetchPolicy: 'cache-and-network',
+      pollInterval: 50
     });
 
-    const {email, userRole, id} = userData?.user || {}; //userData
+    //userData
+    const { id, userRole, name } = userData?.user || {};
 
-    const {sessionToken} = authData?.authenticate || {}; //authData
+    // activity mutation
+    const [ activity, { loading: loggerLoading, error: loggerError, data: loggerData } ] = useMutation(LOGGER, {
+      variables: {
+        "data": {
+          "who": userData?.user.name,
+          "what": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Bejelentkezett"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    });
 
+    //authData
+    const {sessionToken} = authData?.authenticate || {}; 
+
+    // set cookies
     function cookieSetter() {
       const cookies = new Cookies();
       if (authData?.authenticate) {
@@ -67,6 +103,11 @@ export default function Login() {
         return
       };
     };
+
+    useEffect(() => {
+      if (userData?.user.name) {
+        activity();
+    }}, [activity,userData?.user.name]) 
 
     return (
         <>
@@ -95,6 +136,7 @@ export default function Login() {
         {(userData?.user === null) && <div>Hibás emailcím</div>}
         {(authData?.authenticate) && cookieSetter()}
         {(authData?.authenticate) && <Profile /> }
+        
         </>
     )
 }
