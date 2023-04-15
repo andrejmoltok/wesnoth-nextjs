@@ -57,19 +57,11 @@ export default function Profile() {
 
     const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
 
-    const [setName,setSetName] = useState("");
-
-    useEffect(() => {
-      if (data?.user) {
-        setSetName(name);
-        activity();
-      }
-    },[]);
 
     const [activity, { loading: loggerLoading, error: loggerError, data: loggerData }] = useMutation(LOGGER, {
       variables: {
         "data": {
-          "who": setName,
+          "who": data?.user.name,
           "what": [
             {
               "type": "paragraph",
@@ -85,6 +77,7 @@ export default function Profile() {
     });
 
     const handleLogout = () => {
+      activity();
       cookies.remove('id', {
         path: '/',
         maxAge: 3600,
