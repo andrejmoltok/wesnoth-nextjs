@@ -1,7 +1,7 @@
 import styler from '../styles/CommentWrite.module.css';
 import { gql, useMutation } from '@apollo/client';
-import { useState } from 'react';
-import { hasCookie, setCookie, getCookie, deleteCookie } from 'cookies-next';
+import { useState, useEffect } from 'react';
+import Cookies from 'universal-cookie';
 
 const CONNECT_COMMENT_TO_POST = gql`
 mutation Mutation($where: PostWhereUniqueInput!, $data: PostUpdateInput!) {
@@ -22,6 +22,14 @@ export default function CommentWrite({isWrite,id}) {
     const [commentObjects, setCommentObjects] = useState([]);
     const [commentName, setCommentName] = useState("");
     const [inputValue, setInputValue] = useState('');
+    const [getID, setGetID] = useState(null);
+
+    
+    useEffect(() => {
+      const cookies = new Cookies();
+      const getIDCookie = cookies.get('id');
+      (getIDCookie) ? setGetID(getIDCookie): null;
+    },[]);
 
     function handleChange(event) {
         const newValue = event.target.value;
@@ -50,7 +58,7 @@ export default function CommentWrite({isWrite,id}) {
                         "name": commentName,
                         "author": {
                           "connect": {
-                            "id": getCookie('id')
+                            "id": getID
                           }
                         },
                         "content": commentObjects

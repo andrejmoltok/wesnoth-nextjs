@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { hasCookie, getCookie, deleteCookie } from 'cookies-next';
+import Login from '../components/login';
+import Cookies from 'universal-cookie';
 
 const QUERY_PROFILE_INFO_BY_ID = gql`
 query QUERY_PROFILE_INFO($where: UserWhereUniqueInput!) {
@@ -26,11 +27,25 @@ export default function Profile() {
 
     const [getID, setGetID] = useState("");
 
+    const cookies = new Cookies();
+
     useEffect(() => {
-        if (hasCookie('id') && hasCookie('keystonejs-session')) {
-            setGetID(getCookie('id'));
-        }
-    }, []);
+     
+      const cookieValue = cookies.get("id");
+      setGetID(cookieValue);
+    }, [setGetID]);
+
+    const handleLogout = () => {
+      cookies.remove('id', {
+        path: '/',
+        maxAge: 3600,
+      });
+      cookies.remove('keystonejs-session',{
+        path: '/',
+        maxAge: 3600,
+      });
+      setGetID(!getID);
+    };
 
     const { data, loading, error} = useQuery(QUERY_PROFILE_INFO_BY_ID, {
         variables: {
@@ -38,15 +53,15 @@ export default function Profile() {
                 "id": getID
             }
         },
-        pollInterval: 500
+        pollInterval: 100
     });
 
     const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
 
     return (
         <>
-            {(getID === "") && <div>You're not logged in</div>}
-            {(getID) && <div>{name} is logged in</div>}
+            {(!getID) && <Login />}
+            {getID && <><div>{name} is logged in</div><button onClick={handleLogout}>Log Out</button></>}
         </>
     )
 }

@@ -8,9 +8,9 @@ import Login from '../../components/login';
 import Profile from '../../components/profile';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Cookies from 'universal-cookie';
 import { gql, useQuery, ApolloProvider } from '@apollo/client';
 import client from '../../apollo-client';
-import { hasCookie, setCookie, getCookie, deleteCookie } from 'cookies-next';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, 
@@ -119,12 +119,18 @@ function GetPost() {
 
 export default function ID() {
 
-    const [cookieSetting, setCookieSetting] = useState(false);
-
     const router = useRouter();
     
+    const [getID, setGetID] = useState(null);
+
     useEffect(() => {
-      getCookie('id') !== undefined ? setCookieSetting(!cookieSetting) : null;
+      const cookies = new Cookies();
+      
+      const interval = setInterval(() => {
+        const cookieValue = cookies.get("id");
+        setGetID(cookieValue);
+      }, 1000);
+      return () => clearInterval(interval);
     }, []);
 
     const handleHome = () => {
@@ -153,7 +159,7 @@ export default function ID() {
                 />
                       </div>
           <div className={styles.navbar}>
-                <div className={styles.navbarText} onClick={() => {handleHome}}>Főoldal</div>
+                <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
                 <div className={styles.navbarText}>Profil</div>
                 <div className={styles.navbarText}>Cikkek</div>
                 <div className={styles.navbarText}>Fórum</div>
@@ -162,7 +168,7 @@ export default function ID() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            {cookieSetting ? <Profile /> : <Login />}
+            {(!getID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartszelTarto}>

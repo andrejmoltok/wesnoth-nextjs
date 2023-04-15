@@ -3,7 +3,7 @@ import Profile from '../components/profile';
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { gql, useMutation, useLazyQuery } from "@apollo/client";
-import { setCookie, hasCookie, getCookie, deleteCookie } from 'cookies-next';
+import Cookies from 'universal-cookie';
 
 const LOGIN = gql`
 mutation ($email: String!, $password: String!) {
@@ -53,17 +53,23 @@ export default function Login() {
     const {sessionToken} = authData?.authenticate || {}; //authData
 
     function cookieSetter() {
-      if (hasCookie('id') && hasCookie('keystonejs-session')) {
+      const cookies = new Cookies();
+      if (authData?.authenticate) {
+        cookies.set('id', id, {
+          path: '/',
+          maxAge: 3600,
+        });
+        cookies.set('keystonejs-session', sessionToken, {
+          path: '/',
+          maxAge: 3600,
+        });
+      } else if (cookies.get('id') && cookies.get('keystonejs-session')) {
         return
-      } else if (authData?.authenticate) {
-        setCookie('id', id);
-        setCookie('keystonejs-session', sessionToken);
-      }
+      };
     };
 
     return (
         <>
-        
         {(!userData) && (!authData) && <>
         <div className={styles.register}>
         <form className={styles.form}
@@ -71,7 +77,6 @@ export default function Login() {
                 e.preventDefault();
                 checkEmail();
                 login();
-                
           }}>
         <div><label htmlFor="email" className={styles.dist}>Email:</label></div>
         <input type="email" name="email" onChange={(e) => {setEmailInput(e.target.value)}} className={styles.email}/>
@@ -86,24 +91,10 @@ export default function Login() {
         </form>
         </div>
         </>}
-        {(email === emailInput) && (userRole === 'Pending') && <div>Account not activated</div>}
+        {(userRole === 'Pending') && <div>A fiók nincs aktiválva</div>}
         {(userData?.user === null) && <div>Hibás emailcím</div>}
-        {(authData?.authenticate) && <Profile />}
         {(authData?.authenticate) && cookieSetter()}
-        {/* {(userData) && (userData?.user) && (userRole !== 'Pending' ) && <>
-            <div>Username: {name}</div>
-            <div>Email: {email}</div>
-            <div>Role: {adminRole !== null && adminRole}
-                        {userRole !== 'Pending' && userRole}</div>
-            <div>Race: {race?.races}</div>
-            <div><Image 
-                    src={race?.image.url}
-                    alt={`${race?.races}-icon`}
-                    width={72}
-                    height={72}/>
-            </div>
-            
-        </>} */}
+        {(authData?.authenticate) && <Profile /> }
         </>
     )
 }

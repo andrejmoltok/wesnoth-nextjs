@@ -1,21 +1,28 @@
 import Head from 'next/head'
 import Image from "next/image"
 import Router from 'next/router';
+import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.scss'
 import client from "../apollo-client"
 import { ApolloProvider } from '@apollo/client'
-import { getCookie, setCookie, hasCookie, deleteCookie} from 'cookies-next';
+import Cookies from 'universal-cookie';
 import Login from '../components/login';
 import Profile from '../components/profile'
 import Getposts from '../components/getposts';
 
 export default function App() {
 
-  // const router = useRouter();
-
   const handleHome = () => {
     Router.push(`/`);
   }
+
+  const [getID, setGetID] = useState(null);
+
+  useEffect(() => {
+    const cookies = new Cookies();
+    const cookieValue = cookies.get("id");
+    setGetID(cookieValue);
+  }, []);
 
   return (
       <>
@@ -48,7 +55,7 @@ export default function App() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            {(getCookie('id') !== undefined) ? <Profile /> : <Login />}
+            {(!getID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartszelTarto}>
