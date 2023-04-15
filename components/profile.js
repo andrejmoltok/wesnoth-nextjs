@@ -61,7 +61,7 @@ export default function Profile() {
     return (
         <>
             {(!getID) && <Login />}
-            {getID && <><div>{name} is logged in</div><button onClick={handleLogout}>Log Out</button></>}
+            {getID && <><div>{name} is logged in</div><button onClick={handleLogout}>Kilépés</button></>}
         </>
     )
 }

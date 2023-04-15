@@ -28,7 +28,7 @@ export default function CommentWrite({isWrite,id}) {
     useEffect(() => {
       const cookies = new Cookies();
       const getIDCookie = cookies.get('id');
-      (getIDCookie) ? setGetID(getIDCookie): null;
+      setGetID(getIDCookie);
     },[]);
 
     function handleChange(event) {
@@ -36,12 +36,14 @@ export default function CommentWrite({isWrite,id}) {
         setInputValue(newValue);
         const inputLines = newValue.split('\n');
         const newCommentObjects = inputLines.map((line) => (
-            { "type":"paragraph",
-            "children":[{
-            "text": line
-            }] 
-        }));
-        const newCommentName = newCommentObjects[0].children[0].text.slice(0,10);
+            { 
+              "type":"paragraph",
+              "children":[{
+                "text": line
+              }] 
+            }
+        ));
+        const newCommentName = newCommentObjects[0].children[0].text.slice(0,12);
         setCommentName(newCommentName);
         setCommentObjects(newCommentObjects);
     };

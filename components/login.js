@@ -85,7 +85,7 @@ export default function Login() {
         <input type="password" name="password" onChange={(p) => {setPasswordInput(p.target.value)}} className={styles.password}/> 
         
         <div className={styles.button}>
-            <button>Bejelentkezés</button>
+            <button>Belépés</button>
         </div>
 
         </form>

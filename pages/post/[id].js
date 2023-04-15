@@ -42,93 +42,100 @@ query Query($where: PostWhereUniqueInput!) {
   }
 }`
 
-function GetPost() {
+function GetPost({getTheID}) {
 
-  const router = useRouter();
-  const { id } = router.query;
-  const {data, loading, error} = useQuery(QUERY_POST_BY_ID,{
-    variables: { "where": { "id": id }},
-    pollInterval: 500
-  });
+    const router = useRouter();
+    const { id } = router.query;
+    const { data, loading, error } = useQuery(QUERY_POST_BY_ID, {
+      variables: { "where": { "id": id } },
+      pollInterval: 500
+    });
 
-  const {title, content, document, author, name, race, races, image, url, createdAt, commentsCount} = data?.post || {};
+    const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount } = data?.post || {};
 
-  const [isWrite, setIsWrite] = useState(false);
-  const [isView, setIsView] = useState(false);
+    const [isWrite, setIsWrite] = useState(false);
+    const [isView, setIsView] = useState(false);
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 240,
-      behavior: 'smooth',
-    })
-  },[])
+    useEffect(() => {
+      window.scrollTo({
+        top: 240,
+        behavior: 'smooth',
+      });
+    }, []);
 
-  if (loading) {
-    return <div style={{color: 'black', marginLeft: '35px'}}>Betöltés...</div>;
-  }
+    if (loading) {
+      return <div style={{ color: 'black', marginLeft: '35px' }}>Betöltés...</div>;
+    }
 
-  if (error) {
-    return <div style={{color: 'black', marginLeft: '35px'}}>Hiba: {error.message}</div>;
-  }
+    if (error) {
+      return <div style={{ color: 'black', marginLeft: '35px' }}>Hiba: {error.message}</div>;
+    }
+
+    
 
     return (
-        <>
-        
+      <>
+
         <div className={styler.posts}>
           <div className={styler.focim}>
             <div>
-              <Image 
+              <Image
                 src={author?.race?.image.url}
                 width={72}
                 height={72}
-                alt={`${author?.race?.races} icon`}/>
+                alt={`${author?.race?.races} icon`} />
             </div>
             <div className={styler.focimAdatok}>
               <div><h2>{title}</h2></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
               <div>
-                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0,10)} {createdAt?.slice(11,19)}
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {createdAt?.slice(11, 19)}
               </div>
             </div>
           </div>
-          
+
           <div className={styler.document}>
-            <DocumentRenderer document={content?.document}/>
+            <DocumentRenderer document={content?.document} />
           </div>
 
           <div className={styler.comment}>
-            <div  className={styler.postStat}>
-              <div className={styler.writeBtn} onClick={() => {setIsWrite(!isWrite)}}>
-                <div><FontAwesomeIcon icon={faPenToSquare} size="sm"/> Hozzászólok</div>
-              </div>
+            <div className={styler.postStat}>
+              {(!getTheID) ? <>
+                <div className={styler.writeBtn} >
+                  <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Jelentkezz be</div>
+                </div></> : <>
+                <div className={styler.writeBtn} onClick={() => {setIsWrite(!isWrite)}}>
+                  <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Hozzászólok</div>
+                </div>
+              </>}
               <div className={styler.commentView} onClick={() => {setIsView(!isView)}}>
                 <FontAwesomeIcon icon={faBookOpenReader} size="sm" /> Hozzászólások megtekintése</div>
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {commentsCount}</div>
             </div> {/* postStat END */}
             <div className={styler.commentText}>
-              <CommentWrite isWrite={isWrite} id={id}/>
+              {(!getTheID) ? null : <CommentWrite isWrite={isWrite} id={id} />}
             </div> {/* commentText END */}
             {isView && <CommentView id={id} />}
           </div> {/* comment END */}
         </div>
-        
-        </>
-    )
 
-}
+      </>
+    );
+
+  }
+
 
 export default function ID() {
 
     const router = useRouter();
     
-    const [getID, setGetID] = useState(null);
+    const [getTheID, setGetTheID] = useState(null);
 
     useEffect(() => {
       const cookies = new Cookies();
-      
       const interval = setInterval(() => {
         const cookieValue = cookies.get("id");
-        setGetID(cookieValue);
+        setGetTheID(cookieValue);
       }, 1000);
       return () => clearInterval(interval);
     }, []);
@@ -168,7 +175,7 @@ export default function ID() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            {(!getID) ? <Login /> : <Profile />}
+            {(!getTheID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartszelTarto}>
@@ -177,7 +184,7 @@ export default function ID() {
             <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
           </div>
           <div className={styles.tartkozep}>
-              <GetPost />
+              <GetPost getTheID={getTheID}/>
             </div>
         </div>
       </div>
