@@ -1,24 +1,9 @@
 import styles from '../styles/Register.module.css'
 import Image from "next/image"
-import { useState } from 'react'
 import validator from 'validator'
-import { gql, useMutation } from "@apollo/client"
-
-const REGISTER = gql`
-mutation Register($data: UserCreateInput!) {
-    createUser(data: $data) {
-      name
-      email
-      password {
-        isSet
-      }
-      race {
-        races
-      }
-      adminRole
-      userRole
-    }
-  }`;
+import { useState } from 'react'
+import { useMutation } from "@apollo/client"
+import { REGISTER } from '../gql/Register/REGISTER';
 
 export default function Register() {
 

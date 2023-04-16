@@ -1,44 +1,11 @@
 import styles from '../styles/Register.module.css';
 import Profile from '../components/profile';
 import { useEffect, useState } from "react";
-import { gql, useMutation, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useMutation, useLazyQuery } from "@apollo/client";
 import Cookies from 'universal-cookie';
-
-const LOGIN = gql`
-mutation ($email: String!, $password: String!) {
-  authenticate: authenticateUserWithPassword(email: $email, password: $password) {
-    ... on UserAuthenticationWithPasswordSuccess {
-      sessionToken
-    }
-    ... on UserAuthenticationWithPasswordFailure {
-      message
-    }
-  }
-}
-`;
-
-const EMAIL_CHECK = gql`
-query Query($where: UserWhereUniqueInput!) {
-  user(where: $where) {
-    name
-    email
-    userRole
-    id
-  }
-}
-`;
-
-const LOGGER = gql`
-mutation Mutation($data: LogCreateInput!) {
-  createLog(data: $data) {
-    who
-    what {
-      document
-    }
-    when
-  }
-}
-`;
+import { LOGIN } from '../gql/Login/LOGIN';
+import { EMAIL_CHECK } from '../gql/Login/EMAIL_CHECK';
+import { LOGGER } from '../gql/Login/LOGGER';
 
 export default function Login() {
 

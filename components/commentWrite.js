@@ -1,21 +1,9 @@
 import styler from '../styles/CommentWrite.module.css';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
+import { CONNECT_COMMENT_TO_POST } from '../gql/CommentWrite/CONNECT_COMMENT_TO_POST';
 
-const CONNECT_COMMENT_TO_POST = gql`
-mutation Mutation($where: PostWhereUniqueInput!, $data: PostUpdateInput!) {
-    updatePost(where: $where, data: $data) {
-      comments {
-        name
-        author {
-          name
-        }
-        createdAt
-      }
-    }
-  }
-`;
 
 export default function CommentWrite({isWrite,id}) {
 

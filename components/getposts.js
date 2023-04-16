@@ -1,39 +1,14 @@
-import { gql, useQuery, useLazyQuery } from '@apollo/client';
-import { DocumentRenderer } from '@keystone-6/document-renderer';
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Getposts.module.css';
+import { useQuery, useLazyQuery } from '@apollo/client';
+import { DocumentRenderer } from '@keystone-6/document-renderer';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeather, faCalendarDays, faListOl } from '@fortawesome/free-solid-svg-icons'
+import { QUERY_POSTS_LAZY } from '../gql/GetPosts/QUERY_POSTS_LAZY';
+import { QUERY_POSTS_FOR_PAGES } from '../gql/GetPosts/QUERY_POSTS_FOR_PAGES';
 
-const QUERY_POSTS_LAZY = gql`
-query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
-  posts(take: $take, skip: $skip, orderBy: $orderBy) {
-    title
-    content {
-      document
-    }
-    author {
-      name
-      race {
-        image {
-          url
-        }
-        races
-      }
-    }
-    createdAt
-    id
-    commentsCount
-  }
-}`;
-
-const QUERY_POSTS_FOR_PAGES = gql`query Query {
-  posts {
-    title
-  }
-}`;
 
 export default function Getposts() {
 
@@ -95,9 +70,6 @@ export default function Getposts() {
           </div>
         </div>
         </div>)})}
-
-        {/* Komment szekcio */}
-        
        
         {/* Oldalászámozás */}
         <div className={styles.pagination}>

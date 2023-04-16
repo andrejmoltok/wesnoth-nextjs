@@ -1,39 +1,9 @@
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { LOGGER } from '../gql/Login/LOGGER';
+import { QUERY_PROFILE_INFO_BY_ID } from '../gql/Profile/QUERY_PROFILE_INFO_BY_ID';
 import Login from '../components/login';
 import Cookies from 'universal-cookie';
-
-const QUERY_PROFILE_INFO_BY_ID = gql`
-query QUERY_PROFILE_INFO($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      name
-      email
-      race {
-        races
-        image {
-          url
-        }
-      }
-      adminRole
-      userRole
-      isAdmin
-      isEditor
-      isUser
-    }
-  }
-`;
-
-const LOGGER = gql`
-mutation Mutation($data: LogCreateInput!) {
-  createLog(data: $data) {
-    who
-    what {
-      document
-    }
-    when
-  }
-}
-`;
 
 export default function Profile() {
 

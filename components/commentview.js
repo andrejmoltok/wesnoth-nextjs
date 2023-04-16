@@ -2,29 +2,9 @@ import styler from '../styles/CommentView.module.css';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeather, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
-
-const QUERY_POST_COMMENTS = gql`
-query PostCommentsQuery($where: PostWhereUniqueInput!) {
-    post(where: $where) {
-      comments {
-        id
-        author {
-          name
-          race {
-            image {
-              url
-            }
-          }
-        }
-        createdAt
-        content {
-          document
-        }
-      }
-    }
-  }`;
+import { QUERY_POST_COMMENTS } from '../gql/CommentView/QUERY_POST_COMMENTS';
 
 export default function CommentView({id}) {
 
