@@ -1,14 +1,14 @@
 import Head from 'next/head'
 import Image from "next/image"
 import Router from 'next/router';
-import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.scss'
 import client from "../apollo-client"
-import { ApolloProvider } from '@apollo/client'
 import Cookies from 'universal-cookie';
 import Login from '../components/login';
 import Profile from '../components/profile'
 import Getposts from '../components/getposts';
+import { useState, useEffect } from 'react';
+import { ApolloProvider } from '@apollo/client'
 
 export default function App() {
 

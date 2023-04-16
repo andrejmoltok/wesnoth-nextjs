@@ -6,41 +6,15 @@ import CommentView from '../../components/commentview';
 import CommentWrite from '../../components/commentWrite';
 import Login from '../../components/login';
 import Profile from '../../components/profile';
+import Cookies from 'universal-cookie';
+import client from '../../apollo-client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Cookies from 'universal-cookie';
-import { gql, useQuery, ApolloProvider } from '@apollo/client';
-import client from '../../apollo-client';
+import { useQuery, ApolloProvider } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, 
-        faFeather, 
-        faCalendarDays, 
-        faBookOpenReader,
-        faListOl } from '@fortawesome/free-solid-svg-icons'
-
-
-const QUERY_POST_BY_ID = gql`
-query Query($where: PostWhereUniqueInput!) {
-    post(where: $where) {
-    title
-    content {
-      document
-    }
-    author {
-      name
-      race {
-        image {
-          url
-        }
-        races
-      }
-    }
-    createdAt
-    id
-    commentsCount
-  }
-}`
+import { faPenToSquare, faFeather, faCalendarDays, faBookOpenReader, faListOl } from '@fortawesome/free-solid-svg-icons'
+import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
 function GetPost({getTheID}) {
 
@@ -71,11 +45,8 @@ function GetPost({getTheID}) {
       return <div style={{ color: 'black', marginLeft: '35px' }}>Hiba: {error.message}</div>;
     }
 
-    
-
     return (
       <>
-
         <div className={styler.posts}>
           <div className={styler.focim}>
             <div>
@@ -100,6 +71,7 @@ function GetPost({getTheID}) {
 
           <div className={styler.comment}>
             <div className={styler.postStat}>
+              {/* GetTheID for LoggedIn/LoggedOut State */}
               {(!getTheID) ? <>
                 <div className={styler.writeBtn} >
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Jelentkezz be</div>
@@ -118,7 +90,6 @@ function GetPost({getTheID}) {
             {isView && <CommentView id={id} />}
           </div> {/* comment END */}
         </div>
-
       </>
     );
 
