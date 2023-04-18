@@ -7,9 +7,14 @@
     flex-direction: column;
 }
 
-.commentViewUnique {
+.commentViewUnique,
+.commentViewNone {
     border: 3px solid #9b1d20ff;
     border-radius: 5px;
+}
+
+.commentViewNone {
+    text-align: center;
 }
 
 .focim {
@@ -26,6 +31,14 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+}
+
+.deleteIcon {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    cursor: pointer;
 }
 
 .document {

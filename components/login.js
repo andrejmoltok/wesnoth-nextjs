@@ -26,7 +26,9 @@ export default function Login() {
             "email": emailInput
           }
       },
-      pollInterval: 50
+      pollInterval: 50,
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-first',
     });
 
     //userData
@@ -60,11 +62,9 @@ export default function Login() {
       if (authData?.authenticate) {
         cookies.set('id', id, {
           path: '/',
-          maxAge: 3600,
         });
         cookies.set('keystonejs-session', sessionToken, {
           path: '/',
-          maxAge: 3600,
         });
       } else if (cookies.get('id') && cookies.get('keystonejs-session')) {
         return

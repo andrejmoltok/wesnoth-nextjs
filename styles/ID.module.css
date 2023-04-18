@@ -35,7 +35,7 @@
     max-width: 650px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly; 
+    justify-content: space-around; 
 }
 
 .comment {
@@ -59,11 +59,4 @@
 
 .commentView {
     cursor: pointer;
-}
-
-.commentText {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }

@@ -4,7 +4,6 @@ export const QUERY_PROFILE_INFO_BY_ID = gql`
 query QUERY_PROFILE_INFO($where: UserWhereUniqueInput!) {
     user(where: $where) {
       name
-      email
       race {
         races
         image {

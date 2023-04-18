@@ -22,7 +22,9 @@ export default function Profile() {
                 "id": getID
             }
         },
-        pollInterval: 100
+        pollInterval: 60000,
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'cache-first',
     });
 
     const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
@@ -53,6 +55,10 @@ export default function Profile() {
         maxAge: 3600,
       });
       cookies.remove('keystonejs-session',{
+        path: '/',
+        maxAge: 3600,
+      });
+      cookies.remove('name',{
         path: '/',
         maxAge: 3600,
       });

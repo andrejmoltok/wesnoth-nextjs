@@ -6,6 +6,7 @@ query PostCommentsQuery($where: PostWhereUniqueInput!) {
       comments {
         id
         author {
+          id
           name
           race {
             image {

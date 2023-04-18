@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useQuery, ApolloProvider } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faFeather, faCalendarDays, faBookOpenReader, faListOl } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faFeather, faCalendarDays, faListOl } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
 function GetPost({getTheID}) {
@@ -22,13 +22,14 @@ function GetPost({getTheID}) {
     const { id } = router.query;
     const { data, loading, error } = useQuery(QUERY_POST_BY_ID, {
       variables: { "where": { "id": id } },
-      pollInterval: 500
+      pollInterval: 5000, // 5 masodpercenkent frissit
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-first',
     });
 
     const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount } = data?.post || {};
 
     const [isWrite, setIsWrite] = useState(false);
-    const [isView, setIsView] = useState(false);
 
     useEffect(() => {
       window.scrollTo({
@@ -80,14 +81,15 @@ function GetPost({getTheID}) {
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Hozzászólok</div>
                 </div>
               </>}
-              <div className={styler.commentView} onClick={() => {setIsView(!isView)}}>
-                <FontAwesomeIcon icon={faBookOpenReader} size="sm" /> Hozzászólások megtekintése</div>
+
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {commentsCount}</div>
+
             </div> {/* postStat END */}
-            <div className={styler.commentText}>
-              {(!getTheID) ? null : <CommentWrite isWrite={isWrite} id={id} />}
-            </div> {/* commentText END */}
-            {isView && <CommentView id={id} />}
+
+            {<CommentView postID={id} />}
+
+            {(getTheID) && <CommentWrite isWrite={isWrite} id={id} />}
+
           </div> {/* comment END */}
         </div>
       </>
@@ -100,16 +102,20 @@ export default function ID() {
 
     const router = useRouter();
     
-    const [getTheID, setGetTheID] = useState(null);
+    const [getTheID, setGetTheID] = useState(false);
+
+    function IDSetter() {
+      const cookies = new Cookies();
+      if (cookies.get('id')) {
+        setGetTheID(!getTheID)
+      } else {
+        setGetTheID(getTheID)
+      }
+    };
 
     useEffect(() => {
-      const cookies = new Cookies();
-      const interval = setInterval(() => {
-        const cookieValue = cookies.get("id");
-        setGetTheID(cookieValue);
-      }, 1000);
-      return () => clearInterval(interval);
-    }, []);
+        IDSetter();
+    }, [IDSetter]);
 
     const handleHome = () => {
       router.push(`/`);

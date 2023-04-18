@@ -1,28 +1,50 @@
 import styler from '../styles/CommentView.module.css';
 import Image from 'next/image';
+import Cookies from 'universal-cookie';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFeather, faCalendarDays } from '@fortawesome/free-solid-svg-icons'
-import { useQuery } from '@apollo/client';
+import { faFeather, faCalendarDays, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { useQuery, useMutation } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { QUERY_POST_COMMENTS } from '../gql/CommentView/QUERY_POST_COMMENTS';
+import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
+import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
 
-export default function CommentView({id}) {
+export default function CommentView({postID}) {
 
     const { loading, error, data } = useQuery(QUERY_POST_COMMENTS, {
         variables: {
             "where": {
-                "id": id,
+                "id": postID,
             }
         },
-        pollInterval: 1000,
+        pollInterval: 500,
+        fetchPolicy: 'network-only',
+        nextFetchPolicy: 'cache-first',
     });
 
-    const {author, name, race, races, image, url, createdAt, content, document} = data?.post?.comments || {};
+    const {author, name, race, races, image, url, createdAt, content, document, id: commentID, id: userID} = data?.post?.comments || {};
+
+    // check name for comment associating
+    const [getID, setGetID] = useState("");
+
+    // delete Comment mutation
+    const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
+    // disconnect Comment mutation
+    const [disconComment, { loading: disconLoading, error: disconError, data: discondata }] = useMutation(COMMENT_DISCONNECT);
+
+    const cookies = new Cookies();
+  
+    useEffect(() => {
+      data?.post?.comments.map((v,i) => {
+        if (cookies.get('id') === v?.author?.id) {
+        setGetID(v?.author?.id)}})
+    } ,[data]);
     
     return (
         <>
         <div className={styler.commentView}>
-            {data?.post?.comments.map((v,i) => {return <>
+            {(data?.post?.comments.length === 0) ? <div className={styler.commentViewNone}>Még senki sem szólt hozzá</div> : <>{data?.post?.comments.map((v,i) => {return <>
             <div key={i} className={styler.commentViewUnique}>
             <div className={styler.focim}>
                 <div>
@@ -38,12 +60,17 @@ export default function CommentView({id}) {
                     <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt?.slice(0,10)} {v?.createdAt.slice(11,19)}
                   </div>
                 </div>
-                {/* Delete icon <FontAwesomeIcon icon={faTrashCan} size="sm" /> */}
+                {(getID === v?.author?.id) && <div className={styler.deleteIcon}>
+                  <div onClick={() => (disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
+                        deleteComment({variables: {"where": {"id": v?.id}}}))}>
+                          <FontAwesomeIcon icon={faTrashCan} /></div></div>}
             </div>
             <div className={styler.document}>
               <DocumentRenderer document={v?.content?.document}/>
             </div>
-            </div></>})}
+            </div>
+            </>})} {/* .map() function END */}
+            </>} {/* Ternary END */}
         </div>
         </>
     )
