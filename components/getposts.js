@@ -25,15 +25,11 @@ export default function Getposts() {
       ],
     },
     pollInterval: 1000,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
   });
 
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
     {
       pollInterval: 1000,
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-first',
     });
 
     const {commentsCount,content,document,type,children,text,id,title,author,name,race,races,image,url,createdAt} = pagerData?.posts || {};

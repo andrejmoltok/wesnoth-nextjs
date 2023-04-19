@@ -9,6 +9,7 @@ import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { QUERY_POST_COMMENTS } from '../gql/CommentView/QUERY_POST_COMMENTS';
 import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
 import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
+import { COMMENT_REPLACE } from '../gql/CommentView/COMMENT_REPLACE';
 
 export default function CommentView({postID}) {
 
@@ -19,8 +20,7 @@ export default function CommentView({postID}) {
             }
         },
         pollInterval: 500,
-        fetchPolicy: 'network-only',
-        nextFetchPolicy: 'cache-first',
+        
     });
 
     const {author, name, race, races, image, url, createdAt, content, document, id: commentID, id: userID} = data?.post?.comments || {};
@@ -28,6 +28,8 @@ export default function CommentView({postID}) {
     // check name for comment associating
     const [getID, setGetID] = useState("");
 
+    // replace comment mutation
+    const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
     // delete Comment mutation
     const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
     // disconnect Comment mutation
@@ -61,9 +63,20 @@ export default function CommentView({postID}) {
                   </div>
                 </div>
                 {(getID === v?.author?.id) && <div className={styler.deleteIcon}>
-                  <div onClick={() => (disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
-                        deleteComment({variables: {"where": {"id": v?.id}}}))}>
+                  <div onClick={() => {replace({variables: {
+                    "where": {"id": v?.id}, 
+                    "data": {
+                      "content":[{
+                        "type":"paragraph",
+                        "children":[{
+                          "text":"Ezt a hozzászólást a szerzője törölte. - Admin"
+                        }]
+                      }]
+                    }
+                  }})}}>
                           <FontAwesomeIcon icon={faTrashCan} /></div></div>}
+                {/*disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
+                        deleteComment({variables: {"where": {"id": v?.id}}}) */}
             </div>
             <div className={styler.document}>
               <DocumentRenderer document={v?.content?.document}/>

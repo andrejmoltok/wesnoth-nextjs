@@ -22,9 +22,8 @@ function GetPost({getTheID}) {
     const { id } = router.query;
     const { data, loading, error } = useQuery(QUERY_POST_BY_ID, {
       variables: { "where": { "id": id } },
-      pollInterval: 5000, // 5 masodpercenkent frissit
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-first',
+      pollInterval: 1000, // 5 masodpercenkent frissit
+      
     });
 
     const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount } = data?.post || {};
@@ -114,8 +113,11 @@ export default function ID() {
     };
 
     useEffect(() => {
+      const interval = setInterval(() => {
         IDSetter();
-    }, [IDSetter]);
+      }, 1000)
+        return () => clearInterval(interval)
+    }, []);
 
     const handleHome = () => {
       router.push(`/`);
