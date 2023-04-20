@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useQuery, ApolloProvider } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faFeather, faCalendarDays, faListOl } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faFeather, faCalendarDays, faListOl, faCoins, faPoo } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
 function GetPost({getTheID}) {
@@ -26,7 +26,7 @@ function GetPost({getTheID}) {
       
     });
 
-    const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount } = data?.post || {};
+    const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount, id: postID } = data?.post || {};
 
     const [isWrite, setIsWrite] = useState(false);
 
@@ -65,9 +65,14 @@ function GetPost({getTheID}) {
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {timezone}
               </div>
             </div>
-            <div className={styler.voting}>
-              <div>Voting</div>
-            </div>
+            {/* <div className={styler.voting}>
+                <div>
+                  <FontAwesomeIcon icon={faCoins} /> 
+                  / 
+                  <FontAwesomeIcon icon={faPoo} />
+              </div>
+            </div> */}
+            
           </div>
 
           <div className={styler.document}>

@@ -22,7 +22,7 @@ export default function Profile() {
                 "id": getID
             }
         },
-        pollInterval: 60000,
+        pollInterval: 500,
         fetchPolicy: 'network-only',
         nextFetchPolicy: 'cache-first',
     });
@@ -58,17 +58,13 @@ export default function Profile() {
         path: '/',
         maxAge: 3600,
       });
-      cookies.remove('name',{
-        path: '/',
-        maxAge: 3600,
-      });
       setGetID(!getID);
     };
 
     return (
         <>
             {(!getID) && <Login />}
-            {getID && <><div>{name} is logged in</div><button onClick={handleLogout}>Kilépés</button></>}
+            {(getID) && <><div>{name} is logged in</div><button onClick={handleLogout}>Kilépés</button></>}
         </>
     )
 }

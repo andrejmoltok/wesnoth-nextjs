@@ -6,8 +6,8 @@ import { faFeather, faCalendarDays, faTrashCan } from '@fortawesome/free-solid-s
 import { useQuery, useMutation } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { QUERY_POST_COMMENTS } from '../gql/CommentView/QUERY_POST_COMMENTS';
-// import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
-// import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
+import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
+import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
 import { COMMENT_REPLACE } from '../gql/CommentView/COMMENT_REPLACE';
 
 export default function CommentView({postID}) {
@@ -26,10 +26,10 @@ export default function CommentView({postID}) {
 
     // replace comment mutation
     const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
-    // // delete Comment mutation
-    // const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
-    // // disconnect Comment mutation
-    // const [disconComment, { loading: disconLoading, error: disconError, data: discondata }] = useMutation(COMMENT_DISCONNECT);
+    // delete Comment mutation
+    const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
+    // disconnect Comment mutation
+    const [disconComment, { loading: disconLoading, error: disconError, data: discondata }] = useMutation(COMMENT_DISCONNECT);
 
     const cookies = new Cookies();
       
@@ -53,17 +53,12 @@ export default function CommentView({postID}) {
                   </div>
                 </div>
                 {(v?.author?.id === cookies.get('id')) && <><div className={styler.deleteIcon}>
-                  <div onClick={() => {replace({variables: {
-                    "where": {"id": v?.id}, 
-                    "data": {
-                      "content":[{
-                        "type":"paragraph",
-                        "children":[{
-                          "text":"Ezt a hozzászólást a szerzője törölte. - Admin"
-                        }]
-                      }]
-                    }
-                  }})}}> <FontAwesomeIcon icon={faTrashCan} /> </div></div></>}
+                  <div onClick={() => 
+                      {disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
+                        deleteComment({variables: {"where": {"id": v?.id}}})}}>
+                          <FontAwesomeIcon icon={faTrashCan} />
+                  </div>
+                </div></>}
             </div>
             <div className={styler.document}>
               <DocumentRenderer document={v?.content?.document}/>
@@ -77,4 +72,15 @@ export default function CommentView({postID}) {
 }
 
 {/*disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
-  deleteComment({variables: {"where": {"id": v?.id}}}) */}
+  deleteComment({variables: {"where": {"id": v?.id}}}) 
+// {replace({variables: {
+                  //   "where": {"id": v?.id}, 
+                  //   "data": {
+                  //     "content":[{
+                  //       "type":"paragraph",
+                  //       "children":[{
+                  //         "text":"Ezt a hozzászólást a szerzője törölte. - Admin"
+                  //       }]
+                  //     }]
+                  //   }
+                  // }})}*/}

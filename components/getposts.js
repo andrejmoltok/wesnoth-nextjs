@@ -23,12 +23,23 @@ export default function Getposts() {
           "createdAt": "desc"
         }
       ],
+      "where": {
+        "isPublished": {
+          "equals": true,
+        }
+      }
     },
     pollInterval: 1000,
   });
 
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
-    {
+    { variables: {
+      "where": {
+        "isPublished": {
+          "equals": true,
+        }
+      }
+    },
       pollInterval: 1000,
     });
 

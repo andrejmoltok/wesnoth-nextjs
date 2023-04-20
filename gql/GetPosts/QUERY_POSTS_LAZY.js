@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_POSTS_LAZY = gql`
-query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
-  posts(take: $take, skip: $skip, orderBy: $orderBy) {
+query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!, $where: PostWhereInput!) {
+  posts(take: $take, skip: $skip, orderBy: $orderBy, where: $where) {
     title
     content {
       document
@@ -18,6 +18,7 @@ query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
     }
     createdAt
     id
+    isPublished
     commentsCount
   }
 }`;
