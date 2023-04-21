@@ -65,13 +65,11 @@ function GetPost({getTheID}) {
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {timezone}
               </div>
             </div>
-            {/* <div className={styler.voting}>
+            <div className={styler.voting}>
                 <div>
-                  <FontAwesomeIcon icon={faCoins} /> 
-                  / 
-                  <FontAwesomeIcon icon={faPoo} />
+                  <FontAwesomeIcon icon={faCoins} /> / <FontAwesomeIcon icon={faPoo} />
               </div>
-            </div> */}
+            </div>
             
           </div>
 

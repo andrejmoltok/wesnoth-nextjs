@@ -27,6 +27,16 @@
     justify-content: center;
 }
 
+.postLink {
+    text-decoration: none;
+    color: black;
+}
+
+.postLink:hover {
+    color: black;
+    text-decoration: underline;
+}
+
 .document {
     height: 100px;
     margin-bottom: 20px;

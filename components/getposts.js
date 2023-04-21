@@ -53,8 +53,6 @@ export default function Getposts() {
       pager()
     }, []);
 
-    const timezone = new Date();
-
     return (
         <>
         {/* Automatic first load of Posts with normal useQuery */}
@@ -70,17 +68,18 @@ export default function Getposts() {
                 alt={`${v?.author?.race?.races} icon`}/>
             </div>
             <div className={styles.focimAdatok}>
-              <div><Link href={`/post/${v?.id}`} scroll={false}><h2>{v?.title}</h2></Link></div>
+              <div><Link href={`/post/${v?.id}`} scroll={false} className={styles.postLink}><h2>{v?.title}</h2></Link></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
               <div>
-                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {new Date(v?.createdAt).toTimeString().slice(0,8)}
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {'(' + new Date(v?.createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(v?.createdAt).toTimeString().slice(0,8)}
               </div>
-              <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {v?.commentsCount}</div>
+              
             </div>
           </div>
           <div key={i} className={styles.document}>
           <DocumentRenderer document={v?.content.document}/>
           </div>
+          <div><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</div>
         </div>
         </div>)})}
        
