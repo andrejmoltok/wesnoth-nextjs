@@ -45,8 +45,6 @@ function GetPost({getTheID}) {
       return <div style={{ color: 'black', marginLeft: '35px' }}>Hiba: {error.message}</div>;
     }
 
-    const timezone = new Date(createdAt).toTimeString().slice(0,8)
-
     return (
       <>
         <div className={styler.posts}>
@@ -62,7 +60,7 @@ function GetPost({getTheID}) {
               <div><h2>{title}</h2></div>
               <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
               <div>
-                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {timezone}
+                <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {'(' + new Date(createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(createdAt).toTimeString().slice(0,8)}
               </div>
             </div>
             <div className={styler.voting}>
