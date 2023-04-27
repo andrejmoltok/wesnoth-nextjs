@@ -58,11 +58,6 @@ export default function App() {
             {(!getID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
-          <div className={styles.tartszelTarto}>
-            <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
-            
-            <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
-          </div>
           <div className={styles.tartkozep}>
               <Getposts />
             </div>

@@ -16,10 +16,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faFeather, faCalendarDays, faListOl, faCoins, faPoo } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
-function GetPost({getTheID}) {
+function GetPost() {
 
     const router = useRouter();
-    const { id } = router.query;
+
+    const { id, from } = router.query;
+
     const { data, loading, error } = useQuery(QUERY_POST_BY_ID, {
       variables: { "where": { "id": id } },
       pollInterval: 1000, // 5 masodpercenkent frissit
@@ -29,6 +31,24 @@ function GetPost({getTheID}) {
     const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount, id: postID } = data?.post || {};
 
     const [isWrite, setIsWrite] = useState(false);
+
+    const [getTheID, setGetTheID] = useState(false);
+
+    function IDSetter() {
+      const cookies = new Cookies();
+      if (cookies.get('id')) {
+        setGetTheID(!getTheID)
+      } else {
+        setGetTheID(getTheID)
+      }
+    };
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        IDSetter();
+      }, 100)
+        return () => clearInterval(interval)
+    }, []);
 
     useEffect(() => {
       window.scrollTo({
@@ -93,6 +113,8 @@ function GetPost({getTheID}) {
 
             {<CommentView postID={id} />}
 
+            {(getTheID && from === 'getposts') && <CommentWrite isWrite={!isWrite} id={id} />}
+
             {(getTheID) && <CommentWrite isWrite={isWrite} id={id} />}
 
           </div> {/* comment END */}
@@ -109,6 +131,9 @@ export default function ID() {
     
     const [getTheID, setGetTheID] = useState(false);
 
+    // const [bgexpand, setBGExpand] = useState({});
+    // const [midexpand, setMidExpand] = useState({});
+
     function IDSetter() {
       const cookies = new Cookies();
       if (cookies.get('id')) {
@@ -121,7 +146,7 @@ export default function ID() {
     useEffect(() => {
       const interval = setInterval(() => {
         IDSetter();
-      }, 1000)
+      }, 100)
         return () => clearInterval(interval)
     }, []);
 
@@ -158,18 +183,13 @@ export default function ID() {
           </div>
         </div>
         
-      <div className={styles.tarthatter}>
+      <div className={styles.tarthatter} style={{height: '1550px'}}> {/*The style has to be dynamic reading from query length */}
           <div className={styles.sideProfile}>
             {(!getTheID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
-          <div className={styles.tartszelTarto}>
-            <div className={styles.tartszelStart}><div className={styles.tartszel}></div></div>
-            
-            <div className={styles.tartszelEnd}><div className={styles.tartszel}></div></div>
-          </div>
-          <div className={styles.tartkozep}>
-              <GetPost getTheID={getTheID}/>
+          <div className={styles.tartkozep} style={{height: '1410px'}}> {/*The style has to be dynamic reading from query length */}
+              <GetPost />
             </div>
         </div>
       </div>

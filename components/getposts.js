@@ -69,8 +69,8 @@ export default function Getposts() {
             </div>
             <div className={styles.focimAdatok}>
               <div><Link href={`/post/${v?.id}`} scroll={false} className={styles.postLink}><h2>{v?.title}</h2></Link></div>
-              <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
-              <div>
+              <div className={styles.focimData}><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
+              <div className={styles.focimData}>
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {'(' + new Date(v?.createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(v?.createdAt).toTimeString().slice(0,8)}
               </div>
               
@@ -79,7 +79,7 @@ export default function Getposts() {
           <div key={i} className={styles.document}>
           <DocumentRenderer document={v?.content.document}/>
           </div>
-          <div><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</div>
+          <div><Link href={`/post/${v?.id}/?from=getposts`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link></div>
         </div>
         </div>)})}
        

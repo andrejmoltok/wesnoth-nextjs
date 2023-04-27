@@ -27,6 +27,10 @@
     justify-content: center;
 }
 
+.focimData {
+    font-style: italic;
+}
+
 .postLink {
     text-decoration: none;
     color: black;
@@ -41,6 +45,16 @@
     height: 100px;
     margin-bottom: 20px;
     overflow: hidden;
+}
+
+.commentCount {
+    color: #9b1d20ff;
+    text-decoration: none;
+}
+
+.commentCount:hover {
+    color: #9b1d20ff;
+    text-decoration: none;
 }
 
 .pagination {

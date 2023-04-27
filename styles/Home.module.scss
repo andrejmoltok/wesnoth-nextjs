@@ -26,7 +26,6 @@
   min-height: 270px;
   background-size: 100% 100%;
   background-image: url('/fejlec.jpg');
-  z-index: 1;
 }
 
 .logo {
@@ -51,11 +50,9 @@
   background-image: url('/tart-hatter.jpg');
   background-repeat: repeat-y;
   background-size: contain;
-  height: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  position: relative;
   color: #bdb58c;
 }
 
@@ -90,61 +87,48 @@
 .kozep {
   @include make-col(9);
   margin: 3vh auto;
-  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.tartkozep::before {
+  content: " ";
+  display: block;
+  width: 100%;
+  height: 180px;
+  position: absolute;
+  top: -20px;
+  z-index: -1000;
+  background-image: url('/tart-szel.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.tartkozep::after {
+  content: " ";
+  display: block;
+  width: 100%;
+  height: 180px;
+  position: absolute;
+  top: 405px; /* 405px*/
+  z-index: -1000;
+  background-image: url('/tart-szel.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .tartkozep {
-  margin: 0 auto;
+  margin: 0 0;
   width: 100%;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
   position: relative;
-  top: -520px;
+  top: 20px;
   left: 0px;
-  z-index: 4;
   background-image: url('/tart-kozep.jpg');
   background-size: contain;
   background-repeat: repeat-y;
-  height: 420px;
-}
-
-.tartszelTarto {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.tartszelStart {
-  margin: 0 auto;
-  width: 100%;
-  height: 281px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  z-index: 3;
-}
-
-.tartszelEnd {
-  margin: 0 auto;
-  width: 100%;
-  height: 281px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  z-index: 3;
-}
-
-.tartszel {
-  width: 100%;
-  height: 150px;
-  background-image: url('/tart-szel.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  position: relative;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  z-index: 3;
 }
 
 .lablec {
@@ -157,8 +141,8 @@
 }
 
 
-@media (max-width: 1200px) {
-  .loginreg {
+@media (max-width: 1249px) {
+  .sideProfile {
     display: none;
   }
   .kozep {
