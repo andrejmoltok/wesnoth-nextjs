@@ -79,7 +79,7 @@ export default function Getposts() {
           <div key={i} className={styles.document}>
           <DocumentRenderer document={v?.content.document}/>
           </div>
-          <div><Link href={`/post/${v?.id}/?from=getposts`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link></div>
+          <div><Link href={`/post/${v?.id}/?from=comments`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link></div>
         </div>
         </div>)})}
        

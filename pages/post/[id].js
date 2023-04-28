@@ -40,6 +40,7 @@ function GetPost() {
         setGetTheID(!getTheID)
       } else {
         setGetTheID(getTheID)
+        setIsWrite(false)
       }
     };
 
@@ -85,7 +86,7 @@ function GetPost() {
             </div>
             <div className={styler.voting}>
                 <div>
-                  <FontAwesomeIcon icon={faCoins} /> / <FontAwesomeIcon icon={faPoo} />
+                  <FontAwesomeIcon icon={faCoins} />  /  <FontAwesomeIcon icon={faPoo} />
               </div>
             </div>
             
@@ -113,9 +114,7 @@ function GetPost() {
 
             {<CommentView postID={id} />}
 
-            {(getTheID && from === 'getposts') && <CommentWrite isWrite={!isWrite} id={id} />}
-
-            {(getTheID) && <CommentWrite isWrite={isWrite} id={id} />}
+            {(getTheID || from === 'comments') && <CommentWrite isWrite={!isWrite} id={id} />}
 
           </div> {/* comment END */}
         </div>

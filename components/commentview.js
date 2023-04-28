@@ -55,7 +55,8 @@ export default function CommentView({postID}) {
                 {(v?.author?.id === cookies.get('id')) && <><div className={styler.deleteIcon}>
                   <div onClick={() => 
                       {disconComment({variables: {"where": {"id": postID}, "data": {"comments":{"disconnect":[{"id": v?.id}]}}}}),
-                        deleteComment({variables: {"where": {"id": v?.id}}})}}>
+                        deleteComment({variables: {"where": {"id": v?.id}}})
+                        }}>
                           <FontAwesomeIcon icon={faTrashCan} />
                   </div>
                 </div></>}
