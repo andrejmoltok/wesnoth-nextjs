@@ -1,8 +1,4 @@
 @import "variables";
-
-/* TODO: there must be a better way to include every
- * Sass mixin we need
- */
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/maps";
@@ -17,6 +13,8 @@
 .main {
   margin: 5vh auto 0 auto;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   height: auto;
 }
 
@@ -46,7 +44,7 @@
 
 .tarthatter {
   @include make-col(11);
-  margin: auto;
+  margin: 0 56.5px;
   background-image: url('/tart-hatter.jpg');
   background-repeat: repeat-y;
   background-size: contain;

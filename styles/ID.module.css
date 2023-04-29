@@ -25,6 +25,10 @@
     justify-content: center;
 }
 
+.focimData {
+    font-style: italic;
+}
+
 .voting {
     width: 180px;
     margin-right: 30px;

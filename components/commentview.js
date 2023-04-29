@@ -4,13 +4,13 @@ import Cookies from 'universal-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeather, faCalendarDays, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { useQuery, useMutation } from '@apollo/client';
-import { DocumentRenderer } from '@keystone-6/document-renderer';
+import { DocumentRenderer, DocumentRendererProps } from '@keystone-6/document-renderer';
 import { QUERY_POST_COMMENTS } from '../gql/CommentView/QUERY_POST_COMMENTS';
 import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
 import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
-import { COMMENT_REPLACE } from '../gql/CommentView/COMMENT_REPLACE';
+// import { COMMENT_REPLACE } from '../gql/CommentView/COMMENT_REPLACE';
 
-export default function CommentView({postID}) {
+export default function CommentView({postID, hatter, kozep, after}) {
 
     const { loading, error, data } = useQuery(QUERY_POST_COMMENTS, {
         variables: {
@@ -18,20 +18,49 @@ export default function CommentView({postID}) {
                 "id": postID,
             }
         },
-        pollInterval: 500,
-        
+        pollInterval: 100,
     });
 
     const {author, name, race, races, image, url, createdAt, content, document, id: commentID, id: userID} = data?.post?.comments || {};
 
-    // replace comment mutation
-    const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
-    // delete Comment mutation
-    const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
+    // update data
+    let dataLen = data?.post?.comments.length;
+    const commentBox = 198;
+    const tartkozep = 420;
+    const stat = 24;
+    const beforeBox = 20;
+    const afterBox = 155;
+    const commentwrite = 135;
+    
+    // .tarthatter update
+    hatter(((dataLen*commentBox) + tartkozep + stat + commentwrite + beforeBox + afterBox));
+
+    // .tartkozep update
+    kozep(((dataLen*commentBox) + tartkozep + stat + commentwrite))
+
+    // ::after update
+    after(((dataLen*commentBox) + tartkozep + commentwrite))
+
+    // // replace comment mutation
+    // const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
+    
     // disconnect Comment mutation
     const [disconComment, { loading: disconLoading, error: disconError, data: discondata }] = useMutation(COMMENT_DISCONNECT);
-
+    
+    // delete Comment mutation
+    const [deleteComment, { loading: deleteLoading, error: deleteError, data: deleteData }] = useMutation(DELETE_COMMENT);
+    
+    // cookies setup
     const cookies = new Cookies();
+
+    // DocuemntRendererProps
+    const renderers = {
+      block: {
+        paragraph: ({ margin, children }) => {
+          return <p style={{ margin: '0' }}>{children}</p>
+        }
+      }
+    };
       
     return (
         <>
@@ -47,8 +76,8 @@ export default function CommentView({postID}) {
                     alt={`${v?.author?.race?.races} icon`}/>
                 </div>
                 <div className={styler.focimAdatok}>
-                  <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
-                  <div>
+                  <div className={styler.focimData}><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
+                  <div className={styler.focimData}>
                     <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt?.slice(0,10)} {'(' + new Date(v?.createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(v?.createdAt).toTimeString().slice(0,8)}
                   </div>
                 </div>
@@ -62,7 +91,7 @@ export default function CommentView({postID}) {
                 </div></>}
             </div>
             <div className={styler.document}>
-              <DocumentRenderer document={v?.content?.document}/>
+              <DocumentRenderer document={v?.content?.document} renderers={renderers}/>
             </div>
             </div>
             </>})} {/* .map() function END */}

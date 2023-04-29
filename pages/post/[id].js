@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faFeather, faCalendarDays, faListOl, faCoins, faPoo } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
-function GetPost() {
+function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
     const router = useRouter();
 
@@ -58,6 +58,15 @@ function GetPost() {
       });
     }, []);
 
+    // DocuemntRendererProps
+    const renderers = {
+      block: {
+        paragraph: ({ margin, children }) => {
+          return <p style={{ margin: '0' }}>{children}</p>
+        }
+      }
+    };
+
     if (loading) {
       return <div style={{ color: 'black', marginLeft: '35px' }}>Betöltés...</div>;
     }
@@ -79,8 +88,8 @@ function GetPost() {
             </div>
             <div className={styler.focimAdatok}>
               <div><h2>{title}</h2></div>
-              <div><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
-              <div>
+              <div className={styler.focimData}><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {author?.name}</div>
+              <div className={styler.focimData}>
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {createdAt?.slice(0, 10)} {'(' + new Date(createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(createdAt).toTimeString().slice(0,8)}
               </div>
             </div>
@@ -93,7 +102,7 @@ function GetPost() {
           </div>
 
           <div className={styler.document}>
-            <DocumentRenderer document={content?.document} />
+            <DocumentRenderer document={content?.document} renderers={renderers}/>
           </div>
 
           <div className={styler.comment}>
@@ -112,7 +121,7 @@ function GetPost() {
 
             </div> {/* postStat END */}
 
-            {<CommentView postID={id} />}
+            {<CommentView postID={id} hatter={tarthatterUpdate} kozep={tartkozepUpdate} after={afterUpdate}/>}
 
             {(getTheID || from === 'comments') && <CommentWrite isWrite={!isWrite} id={id} />}
 
@@ -130,8 +139,21 @@ export default function ID() {
     
     const [getTheID, setGetTheID] = useState(false);
 
-    // const [bgexpand, setBGExpand] = useState({});
-    // const [midexpand, setMidExpand] = useState({});
+    const [tarthatter, setTarthatter] = useState(0);
+    const [tartkozep, setTartkozep] = useState(0);
+    const [after, setAfter] = useState(0);
+
+    const handleTarthatter = (newtarthatter) => {
+      setTarthatter(newtarthatter);
+    };
+
+    const handleTartkozep = (newtartkozep) => {
+      setTartkozep(newtartkozep);
+    };
+
+    const handleAfter = (newafter) => {
+      setAfter(newafter);
+    };
 
     function IDSetter() {
       const cookies = new Cookies();
@@ -151,7 +173,7 @@ export default function ID() {
 
     const handleHome = () => {
       router.push(`/`);
-    }
+    };
 
     return (
         <>
@@ -173,22 +195,74 @@ export default function ID() {
                     priority
                     className={styles.logoImg}
                 />
-                      </div>
+            </div>
           <div className={styles.navbar}>
                 <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
                 <div className={styles.navbarText}>Profil</div>
-                <div className={styles.navbarText}>Cikkek</div>
                 <div className={styles.navbarText}>Fórum</div>
           </div>
         </div>
         
-      <div className={styles.tarthatter} style={{height: '1550px'}}> {/*The style has to be dynamic reading from query length */}
+      <div className="tarthatter"> {/*The style has to be dynamic reading from query length */}
+          <style jsx>{`
+            .tarthatter {
+              margin: 0px 56.5px;
+              background-image: url('/tart-hatter.jpg');
+              background-repeat: repeat-y;
+              background-size: contain;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              color: #bdb58c;
+              height: ${tarthatter}px;
+            }
+
+            .tartkozep::before {
+              content: " ";
+              display: block;
+              width: 100%;
+              height: 155px;
+              position: absolute;
+              top: -20px;
+              z-index: -1000;
+              background-image: url('/tart-szel.jpg');
+              background-repeat: no-repeat;
+              background-size: contain;
+            }
+            
+            .tartkozep::after {
+              content: " ";
+              display: block;
+              width: 100%;
+              height: 155px;
+              position: absolute;
+              top: ${after}px; /* 405px*/
+              z-index: -1000;
+              background-image: url('/tart-szel.jpg');
+              background-repeat: no-repeat;
+              background-size: contain;
+            }
+            
+            .tartkozep {
+              margin: 0 0;
+              width: 100%;
+              height: ${tartkozep}px;
+              display: flex;
+              flex-direction: column;
+              position: relative;
+              top: 20px;
+              left: 0px;
+              background-image: url('/tart-kozep.jpg');
+              background-size: contain;
+              background-repeat: repeat-y;
+            }
+          `}</style>
           <div className={styles.sideProfile}>
             {(!getTheID) ? <Login /> : <Profile />}
           </div>
         <div className={styles.kozep}>
-          <div className={styles.tartkozep} style={{height: '1410px'}}> {/*The style has to be dynamic reading from query length */}
-              <GetPost />
+          <div className="tartkozep"> {/*The style has to be dynamic reading from query length */}
+              <GetPost tarthatterUpdate={handleTarthatter} tartkozepUpdate={handleTartkozep} afterUpdate={handleAfter}/>
             </div>
         </div>
       </div>

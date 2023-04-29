@@ -53,6 +53,15 @@ export default function Getposts() {
       pager()
     }, []);
 
+    // DocuemntRendererProps
+    const renderers = {
+      block: {
+        paragraph: ({ margin, children }) => {
+          return <p style={{ margin: '0' }}>{children}</p>
+        }
+      }
+    };
+
     return (
         <>
         {/* Automatic first load of Posts with normal useQuery */}
@@ -77,7 +86,7 @@ export default function Getposts() {
             </div>
           </div>
           <div key={i} className={styles.document}>
-          <DocumentRenderer document={v?.content.document}/>
+          <DocumentRenderer document={v?.content.document} renderers={renderers}/>
           </div>
           <div><Link href={`/post/${v?.id}/?from=comments`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link></div>
         </div>
