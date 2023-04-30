@@ -97,8 +97,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
                 <div>
                   <FontAwesomeIcon icon={faCoins} />  /  <FontAwesomeIcon icon={faPoo} />
               </div>
-            </div>
-            
+            </div> 
           </div>
 
           <div className={styler.document}>
@@ -123,7 +122,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
             {<CommentView postID={id} hatter={tarthatterUpdate} kozep={tartkozepUpdate} after={afterUpdate}/>}
 
-            {(getTheID || from === 'comments') && <CommentWrite isWrite={!isWrite} id={id} />}
+            {(getTheID && from === 'comments') && <CommentWrite isWrite={!isWrite} id={id} />}
 
           </div> {/* comment END */}
         </div>
