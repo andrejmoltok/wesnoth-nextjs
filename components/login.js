@@ -1,109 +1,100 @@
 import styles from '../styles/Register.module.css';
-import Profile from '../components/profile';
-import { useEffect, useState } from "react";
-import { gql, useMutation, useLazyQuery } from "@apollo/client";
+import SideProfile from './sideprofile';
+import client from '../apollo-client';
 import Cookies from 'universal-cookie';
-import { LOGIN } from '../gql/Login/LOGIN';
+import { useState } from "react";
 import { EMAIL_CHECK } from '../gql/Login/EMAIL_CHECK';
+import { LOGIN } from '../gql/Login/LOGIN';
 import { LOGGER } from '../gql/Login/LOGGER';
 
 export default function Login() {
 
     // email input value
-    var [emailInput, setEmailInput] = useState("");
+    const [email, setEmail] = useState("");
     // password input value
-    var [passwordInput, setPasswordInput] = useState("");
+    const [password, setPassword] = useState("");
+    // emailData
+    const [data, setData] = useState(null);
 
-    // LOGIN Mutation
-    const [login, {loading: authLoading, error: authError, data: authData}] = useMutation(LOGIN, {
-      variables: { "email": emailInput, "password": passwordInput },
-    });
+    const handleLogin = async (e) => {
+      e.preventDefault();
 
-    // EMAIL verification query
-    const [ checkEmail, {loading: userLoading, error: userError, data: userData} ] = useLazyQuery(EMAIL_CHECK, {
+      // Verify email
+    const { data: emailData } = await client.query({
+      query: EMAIL_CHECK,
       variables: {
-          "where": {
-            "email": emailInput
-          }
+        where: {
+          email: email,
+        },
       },
-      pollInterval: 50,
-      fetchPolicy: 'network-only',
-      nextFetchPolicy: 'cache-first',
     });
 
-    //userData
-    const { id, userRole, name } = userData?.user || {};
-
-    // activity mutation
-    const [ activity, { loading: loggerLoading, error: loggerError, data: loggerData } ] = useMutation(LOGGER, {
+    // Authenticate user with password
+    const { data: authData } = await client.mutate({
+      mutation: LOGIN,
       variables: {
-        "data": {
-          "who": userData?.user.name,
-          "what": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "text": "Bejelentkezett"
-                }
-              ]
-            }
-          ]
-        }
-      }
+        email: email,
+        password: password,
+      },
     });
 
-    //authData
-    const {sessionToken} = authData?.authenticate || {}; 
+    const { sessionToken } = authData?.authenticateUserWithPassword || {};
+    const { id, userRole, name } = emailData?.user || {};
 
-    // set cookies
-    function cookieSetter() {
-      const cookies = new Cookies();
-      if (authData?.authenticate) {
-        cookies.set('id', id, {
-          path: '/',
-        });
-        cookies.set('keystonejs-session', sessionToken, {
-          path: '/',
-        });
-      } else if (cookies.get('id') && cookies.get('keystonejs-session')) {
-        return
-      };
-    };
+    // Log activity
+    const { data: loggerData } = await client.mutate({
+      mutation: LOGGER,
+      variables: {
+        data: {
+          who: name,
+          what: [
+            {
+              type: 'paragraph',
+              children: [{ text: 'Bejelentkezett' }],
+            },
+          ],
+        },
+      },
+    });
 
-    useEffect(() => {
-      if (userData?.user.name) {
-        activity();
-    }}, [activity,userData?.user.name]) 
+    // Set cookies
+    const cookies = new Cookies();
+    cookies.set('id', id, {
+      path: '/',
+    });
+    cookies.set('keystonejs-session', sessionToken, {
+      path: '/',
+    });
+
+    // check if there is data set, if not do nothing, 
+    // otherwise set the data with the incoming `emailData`
+    if (!data) {
+      // do nothing here
+    } else {
+      setData(emailData);
+    }
+  }
 
     return (
         <>
-        {(!userData) && (!authData) && <>
+        {(data && data?.userRole !== 'Pending') && <SideProfile />}
+        {<>
         <div className={styles.register}>
         <form className={styles.form}
-            onSubmit={e => {
-                e.preventDefault();
-                checkEmail();
-                login();
-          }}>
+          onSubmit={handleLogin}>
         <div><label htmlFor="email" className={styles.dist}>Email:</label></div>
-        <input type="email" name="email" onChange={(e) => {setEmailInput(e.target.value)}} className={styles.email}/>
+        <input type="email" name="email" onChange={(e) => {setEmail(e.target.value)}} className={styles.email}/>
         
         <div><label htmlFor="password" className={styles.dist}>Jelszó:</label></div>
-        <input type="password" name="password" onChange={(p) => {setPasswordInput(p.target.value)}} className={styles.password}/> 
+        <input type="password" name="password" onChange={(p) => {setPassword(p.target.value)}} className={styles.password}/> 
         
         <div className={styles.button}>
-            <button>Belépés</button>
+            <button type='submit'>Belépés</button>
         </div>
 
         </form>
         </div>
         </>}
-        {(userRole === 'Pending') && <div>A fiók nincs aktiválva</div>}
-        {(userData?.user === null) && <div>Hibás emailcím</div>}
-        {(authData?.authenticate) && cookieSetter()}
-        {(authData?.authenticate) && <Profile /> }
-        
         </>
     )
 }

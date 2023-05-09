@@ -1,48 +1,42 @@
-import Head from 'next/head'
-import Image from "next/image"
-import Router from 'next/router';
-import styles from '../styles/Home.module.scss'
-import client from "../apollo-client"
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../../styles/Home.module.scss';
+import SideProfile from "../../components/sideprofile";
+import Login from '../../components/login';
+import Profile from '../../components/profile';
 import Cookies from 'universal-cookie';
-import Login from '../components/login';
-import SideProfile from '../components/sideprofile'
-import Getposts from '../components/getposts';
-import { useState, useEffect } from 'react';
-import { ApolloProvider } from '@apollo/client'
+import client from '../../apollo-client';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { ApolloProvider } from '@apollo/client';
 
+function ID() {
 
-export default function App() {
+    const router = useRouter();
 
-  const [getID, setGetID] = useState(undefined);
+    const { id } = router.query;
 
-  const cookies = new Cookies();
+    const [getID, setGetID] = useState(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setGetID(cookies.get('id'));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    useEffect(() => {
+      const cookies = new Cookies();
+      const cookieValue = cookies.get("id");
+      setGetID(cookieValue);
+    }, []);
 
-  const handleHome = () => {
-    Router.push(`/`);
-  }
+    const handleHome = () => {
+        router.push('/');
+    };
 
-  const handleProfile = (value) => {
-    Router.push(`/profile/${value}`);
-  };
-
-  return (
-      <>
-      <Head>
+    return (
+        <> 
+        <Head>
         <title>Magyar Wesnoth Közösségi Portál</title>
         <meta name="description" content="Magyar Wesnoth Közösségi Portál" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <ApolloProvider client={client}>
-
       <main className={styles.main}>
         <div className={styles.fejlec}>
           <div className={styles.logo}>
@@ -57,7 +51,7 @@ export default function App() {
           </div>
           <div className={styles.navbar}>
                 <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
-                <div className={styles.navbarText} onClick={getID && getID !==false ? () => handleProfile(getID) : undefined}>Profil</div>
+                <div className={styles.navbarText}>Profil</div>
                 <div className={styles.navbarText}>Fórum</div>
           </div>
         </div>
@@ -68,7 +62,7 @@ export default function App() {
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartkozep}>
-              <Getposts />
+              <Profile getID={getID} />
             </div>
         </div>
       </div>
@@ -76,10 +70,10 @@ export default function App() {
       <div className={styles.lablec}>
         <div></div>
       </div>
-
       </main>
-
       </ApolloProvider>
-      </>
-  )
+        </>
+    )
 }
+
+export default ID;

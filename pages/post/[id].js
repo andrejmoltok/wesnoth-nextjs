@@ -5,7 +5,7 @@ import styler from '../../styles/ID.module.css';
 import CommentView from '../../components/commentview';
 import CommentWrite from '../../components/commentWrite';
 import Login from '../../components/login';
-import Profile from '../../components/profile';
+import SideProfile from '../../components/sideprofile';
 import Cookies from 'universal-cookie';
 import client from '../../apollo-client';
 import { useState, useEffect } from 'react';
@@ -15,6 +15,7 @@ import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faFeather, faCalendarDays, faListOl, faCoins, faPoo } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
+
 
 function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
@@ -111,7 +112,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
                 <div className={styler.writeBtn} >
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Jelentkezz be</div>
                 </div></> : <>
-                <div className={styler.writeBtn} onClick={() => {setIsWrite(!isWrite)}}>
+                <div className={styler.writeBtn} onClick={() => {setIsWrite(true)}}>
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Hozzászólok</div>
                 </div>
               </>}
@@ -122,7 +123,9 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
             {<CommentView postID={id} hatter={tarthatterUpdate} kozep={tartkozepUpdate} after={afterUpdate}/>}
 
-            {(getTheID && from === 'comments') && <CommentWrite isWrite={!isWrite} id={id} />}
+            {(getTheID && from === 'comments') && <CommentWrite isWrite={true} id={id} />}
+
+            {(getTheID) && <CommentWrite isWrite={true} id={id} />}
 
           </div> {/* comment END */}
         </div>
@@ -136,7 +139,8 @@ export default function ID() {
 
     const router = useRouter();
     
-    const [getTheID, setGetTheID] = useState(false);
+    const [getTheID, setGetTheID] = useState(undefined);
+    const [theID, setTheID] = useState('');
 
     const [tarthatter, setTarthatter] = useState(0);
     const [tartkozep, setTartkozep] = useState(0);
@@ -157,21 +161,27 @@ export default function ID() {
     function IDSetter() {
       const cookies = new Cookies();
       if (cookies.get('id')) {
-        setGetTheID(!getTheID)
+        setGetTheID(true);
+        setTheID(cookies.get('id'))
       } else {
-        setGetTheID(getTheID)
+        setGetTheID(false);
+        setTheID('');
       }
     };
 
     useEffect(() => {
       const interval = setInterval(() => {
         IDSetter();
-      }, 100)
+      }, 10)
         return () => clearInterval(interval)
     }, []);
 
     const handleHome = () => {
       router.push(`/`);
+    };
+
+    const handleProfile = (value) => {
+      router.push(`/profile/${value}`);
     };
 
     return (
@@ -197,7 +207,7 @@ export default function ID() {
             </div>
           <div className={styles.navbar}>
                 <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
-                <div className={styles.navbarText}>Profil</div>
+                <div className={styles.navbarText} onClick={getTheID && getTheID !== false? () => handleProfile(theID) : undefined}>Profil</div>
                 <div className={styles.navbarText}>Fórum</div>
           </div>
         </div>
@@ -257,7 +267,7 @@ export default function ID() {
             }
           `}</style>
           <div className={styles.sideProfile}>
-            {(!getTheID) ? <Login /> : <Profile />}
+            {(!getTheID) ? <Login /> : <SideProfile />}
           </div>
         <div className={styles.kozep}>
           <div className="tartkozep"> {/*The style has to be dynamic reading from query length */}

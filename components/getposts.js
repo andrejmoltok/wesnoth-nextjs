@@ -24,8 +24,8 @@ export default function Getposts() {
         }
       ],
       "where": {
-        "isPublished": {
-          "equals": true,
+        "publishedState": {
+          "equals": "Published",
         }
       }
     },
@@ -35,12 +35,12 @@ export default function Getposts() {
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
     { variables: {
       "where": {
-        "isPublished": {
-          "equals": true,
+        "publishedState": {
+          "equals": "Published",
         }
       }
     },
-      pollInterval: 1000,
+      pollInterval: 5000,
     });
 
     const {commentsCount,content,document,type,children,text,id,title,author,name,race,races,image,url,createdAt} = pagerData?.posts || {};
@@ -49,6 +49,7 @@ export default function Getposts() {
 
     const range = (start, end) => Array.from({ length: (end - start) + 1}, (_, idx) => idx + 1);
 
+    // pager() function runs every time there's a click
     useEffect(() => {
       pager()
     }, []);
@@ -77,18 +78,25 @@ export default function Getposts() {
                 alt={`${v?.author?.race?.races} icon`}/>
             </div>
             <div className={styles.focimAdatok}>
-              <div><Link href={`/post/${v?.id}`} scroll={false} className={styles.postLink}><h2>{v?.title}</h2></Link></div>
-              <div className={styles.focimData}><FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}</div>
+              <div>
+                <Link href={`/post/${v?.id}`} scroll={false} className={styles.postLink}><h2>{v?.title}</h2></Link>
+              </div>
+              <div className={styles.focimData}>
+                <FontAwesomeIcon icon={faFeather} size={"sm"} /> Szerző: {v?.author?.name}
+              </div>
               <div className={styles.focimData}>
                 <FontAwesomeIcon icon={faCalendarDays} size="sm" /> Dátum: {v?.createdAt.slice(0,10)} {'(' + new Date(v?.createdAt).toLocaleString('hu-HU', {weekday: 'short'}) + ')'} {new Date(v?.createdAt).toTimeString().slice(0,8)}
               </div>
-              
             </div>
           </div>
+
           <div key={i} className={styles.document}>
-          <DocumentRenderer document={v?.content.document} renderers={renderers}/>
+            <DocumentRenderer document={v?.content.document} renderers={renderers}/>
           </div>
-          <div><Link href={`/post/${v?.id}/?from=comments`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link></div>
+          
+          <div>
+            <Link href={`/post/${v?.id}/?from=comments`} className={styles.commentCount} ><FontAwesomeIcon icon={faListOl} size="sm" /> {v?.commentsCount} hozzászólás</Link>
+          </div>
         </div>
         </div>)})}
        

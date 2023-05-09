@@ -1,20 +1,8 @@
-import { useQuery, useMutation } from '@apollo/client';
-import { useEffect, useState } from 'react';
-import { LOGGER } from '../gql/Login/LOGGER';
-import { QUERY_PROFILE_INFO_BY_ID } from '../gql/Profile/QUERY_PROFILE_INFO_BY_ID';
-import Login from '../components/login';
-import Cookies from 'universal-cookie';
+import { useQuery } from "@apollo/client";
+import { QUERY_PROFILE_INFO_BY_ID } from "../gql/Profile/QUERY_PROFILE_INFO_BY_ID";
+import styles from '../styles/Profile.module.css';
 
-export default function Profile() {
-
-    const [getID, setGetID] = useState("");
-
-    const cookies = new Cookies();
-
-    useEffect(() => {
-      const cookieValue = cookies.get("id");
-      setGetID(cookieValue);
-    }, [setGetID]);
+function Profile({getID}) {
 
     const { data, loading, error} = useQuery(QUERY_PROFILE_INFO_BY_ID, {
         variables: {
@@ -22,49 +10,18 @@ export default function Profile() {
                 "id": getID
             }
         },
-        pollInterval: 500,
+        pollInterval: 1000,
         fetchPolicy: 'network-only',
         nextFetchPolicy: 'cache-first',
     });
 
     const { name, email, race, races, image, url, adminRole, userRole, isAdmin, isEditor, isUser} = data?.user || {};
 
-
-    const [activity, { loading: loggerLoading, error: loggerError, data: loggerData }] = useMutation(LOGGER, {
-      variables: {
-        "data": {
-          "who": data?.user.name,
-          "what": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "text": "Kijelentkezett"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    });
-
-    const handleLogout = () => {
-      activity();
-      cookies.remove('id', {
-        path: '/',
-        maxAge: 3600,
-      });
-      cookies.remove('keystonejs-session',{
-        path: '/',
-        maxAge: 3600,
-      });
-      setGetID(!getID);
-    };
-
     return (
         <>
-            {(!getID) && <Login />}
-            {(getID) && <><div>{name} is logged in</div><button onClick={handleLogout}>Kilépés</button></>}
+        <div style={{color:'black', marginLeft:'35px'}}>Profile of {name}</div>
         </>
     )
 }
+
+export default Profile;

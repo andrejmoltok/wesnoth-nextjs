@@ -18,7 +18,7 @@ query Query($take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!, $where: Pos
     }
     createdAt
     id
-    isPublished
+    publishedState
     commentsCount
   }
 }`;
