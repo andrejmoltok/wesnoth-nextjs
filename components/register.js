@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useMutation } from "@apollo/client"
 import { REGISTER } from '../gql/Register/REGISTER';
 
-export default function Register() {
+export default function Register({handleShowRegister,handleShowLogin}) {
 
     
     // username input value
@@ -165,6 +165,14 @@ export default function Register() {
             </div>
         </form>
         </div>}
+
+        <div className={styles.showRegister}>
+          <ul className={styles.showRegisterUL}>
+            <li>
+              <p className={styles.showRegisterP} onClick={() => {handleShowRegister(false),handleShowLogin(false)}}>Bejelentkezés</p>
+            </li>
+          </ul>
+        </div>
     </>
     ) 
 }

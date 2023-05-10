@@ -4,7 +4,7 @@ import styles from '../../styles/Home.module.scss';
 import styler from '../../styles/ID.module.css';
 import CommentView from '../../components/commentview';
 import CommentWrite from '../../components/commentWrite';
-import Login from '../../components/login';
+import LoginReg from '../../components/loginreg';
 import SideProfile from '../../components/sideprofile';
 import Cookies from 'universal-cookie';
 import client from '../../apollo-client';
@@ -25,7 +25,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
     const { data, loading, error } = useQuery(QUERY_POST_BY_ID, {
       variables: { "where": { "id": id } },
-      pollInterval: 1000, // 5 masodpercenkent frissit
+      pollInterval: 1000, // masodpercenkent frissit
       
     });
 
@@ -35,22 +35,18 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
     const [getTheID, setGetTheID] = useState(false);
 
-    function IDSetter() {
-      const cookies = new Cookies();
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const cookies = new Cookies();
       if (cookies.get('id')) {
         setGetTheID(!getTheID)
       } else {
         setGetTheID(getTheID)
         setIsWrite(false)
       }
-    };
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        IDSetter();
       }, 100)
         return () => clearInterval(interval)
-    }, []);
+    }, [getTheID]);
 
     useEffect(() => {
       window.scrollTo({
@@ -95,9 +91,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
               </div>
             </div>
             <div className={styler.voting}>
-                <div>
-                  <FontAwesomeIcon icon={faCoins} />  /  <FontAwesomeIcon icon={faPoo} />
-              </div>
+                <div><FontAwesomeIcon icon={faCoins} />  /  <FontAwesomeIcon icon={faPoo} /></div>
             </div> 
           </div>
 
@@ -123,9 +117,7 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
 
             {<CommentView postID={id} hatter={tarthatterUpdate} kozep={tartkozepUpdate} after={afterUpdate}/>}
 
-            {(getTheID && from === 'comments') && <CommentWrite isWrite={true} id={id} />}
-
-            {(getTheID) && <CommentWrite isWrite={true} id={id} />}
+            {(getTheID || (getTheID && from === 'comments')) && <CommentWrite isWrite={true} id={id} />}
 
           </div> {/* comment END */}
         </div>
@@ -158,8 +150,9 @@ export default function ID() {
       setAfter(newafter);
     };
 
-    function IDSetter() {
-      const cookies = new Cookies();
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const cookies = new Cookies();
       if (cookies.get('id')) {
         setGetTheID(true);
         setTheID(cookies.get('id'))
@@ -167,11 +160,6 @@ export default function ID() {
         setGetTheID(false);
         setTheID('');
       }
-    };
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        IDSetter();
       }, 10)
         return () => clearInterval(interval)
     }, []);
@@ -207,7 +195,7 @@ export default function ID() {
             </div>
           <div className={styles.navbar}>
                 <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
-                <div className={styles.navbarText} onClick={getTheID && getTheID !== false? () => handleProfile(theID) : undefined}>Profil</div>
+                <div className={styles.navbarText} onClick={getTheID && getTheID !== false ? () => handleProfile(theID) : undefined}>Profil</div>
                 <div className={styles.navbarText}>Fórum</div>
           </div>
         </div>
@@ -245,7 +233,7 @@ export default function ID() {
               width: 100%;
               height: 155px;
               position: absolute;
-              top: ${after}px; /* 405px*/
+              top: ${after}px;
               z-index: -1000;
               background-image: url('/tart-szel.jpg');
               background-repeat: no-repeat;
@@ -267,7 +255,7 @@ export default function ID() {
             }
           `}</style>
           <div className={styles.sideProfile}>
-            {(!getTheID) ? <Login /> : <SideProfile />}
+            {(!getTheID) ? <LoginReg /> : <SideProfile />}
           </div>
         <div className={styles.kozep}>
           <div className="tartkozep"> {/*The style has to be dynamic reading from query length */}

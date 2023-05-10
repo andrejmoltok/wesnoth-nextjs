@@ -4,20 +4,19 @@ import Router from 'next/router';
 import styles from '../styles/Home.module.scss'
 import client from "../apollo-client"
 import Cookies from 'universal-cookie';
-import Login from '../components/login';
+import LoginReg from '../components/loginreg';
 import SideProfile from '../components/sideprofile'
 import Getposts from '../components/getposts';
 import { useState, useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client'
 
 
-export default function App() {
+export default function App({}) {
 
   const [getID, setGetID] = useState(undefined);
 
-  const cookies = new Cookies();
-
   useEffect(() => {
+    const cookies = new Cookies();
     const interval = setInterval(() => {
       setGetID(cookies.get('id'));
     }, 1000);
@@ -64,7 +63,7 @@ export default function App() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            {(!getID) ? <Login /> : <SideProfile />}
+            {(!getID) ? <LoginReg /> : <SideProfile />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartkozep}>

@@ -31,7 +31,7 @@ export default function CommentWrite({isWrite,id}) {
               }] 
             }
         ));
-        const newCommentName = newCommentObjects[0].children[0].text.slice(0,12);
+        const newCommentName = getID.slice(-4) + newCommentObjects[0].children[0].text.slice(0,6);
         setCommentName(newCommentName);
         setCommentObjects(newCommentObjects);
     };
@@ -54,7 +54,7 @@ export default function CommentWrite({isWrite,id}) {
                         "content": commentObjects
                       }
                     ]
-                  }
+                }
             }
         }
     });

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../../styles/Home.module.scss';
 import SideProfile from "../../components/sideprofile";
-import Login from '../../components/login';
+import LoginReg from '../../components/loginreg';
 import Profile from '../../components/profile';
 import Cookies from 'universal-cookie';
 import client from '../../apollo-client';
@@ -58,11 +58,11 @@ function ID() {
         
       <div className={styles.tarthatter}>
           <div className={styles.sideProfile}>
-            {(!getID) ? <Login /> : <SideProfile />}
+            {(!getID) ? <LoginReg /> : <SideProfile />}
           </div>
         <div className={styles.kozep}>
           <div className={styles.tartkozep}>
-              <Profile getID={getID} />
+              <Profile getID={id} />
             </div>
         </div>
       </div>

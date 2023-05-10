@@ -13,6 +13,7 @@ query PostCommentsQuery($where: PostWhereUniqueInput!) {
               url
             }
           }
+          commentsCount
         }
         createdAt
         content {

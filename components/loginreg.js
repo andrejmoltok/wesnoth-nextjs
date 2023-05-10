@@ -4,29 +4,26 @@ import { useState } from "react";
 
 export default function LoginReg() {
 
-    const [isLoginActive, setIsLoginActive] = useState(false);
-    const [isRegisterActive, setIsRegisterActive] = useState(false);
+    // show Register component
+    const [showReg, setShowReg] = useState(false);
 
-    const handleToggle = (type) => {
-        if (type === "login") {
-            setIsLoginActive(true);
-            setIsRegisterActive(false);
-        } else {
-            setIsLoginActive(false);
-            setIsRegisterActive(true);
-        }
+    // show Login component
+    const [showLogin, setShowLogin] = useState(false);
+
+    // change Register state
+    const handleShowRegister = (newRegisterState) => {
+        setShowReg(newRegisterState);
+    };
+
+    // change Login state
+    const handleShowLogin = (newLoginState) => {
+        setShowLogin(newLoginState);
     };
 
     return (
         <>
-            <div>
-                <button onClick={() => handleToggle("login")} disabled={isLoginActive}>Bejelentkezés</button>
-            </div>
-            <div>
-                <button onClick={() => handleToggle("register")} disabled={isRegisterActive}>Regisztráció</button>
-            </div>
-            {isLoginActive && <Login />}
-            {isRegisterActive && <Register />}
+            {(!showLogin) && <Login handleShowRegister={handleShowRegister} handleShowLogin={handleShowLogin}/>}
+            {(showReg) && <Register handleShowLogin={handleShowLogin} handleShowRegister={handleShowRegister}/>}
         </>
     );
 }

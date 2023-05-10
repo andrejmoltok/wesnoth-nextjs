@@ -66,7 +66,7 @@ export default function Getposts() {
     return (
         <>
         {/* Automatic first load of Posts with normal useQuery */}
-        {pagerData?.posts.map((v,i) => {return (
+        {(pagerLoading) ? (<div style={{marginLeft: '35px', color: 'black'}}>Betöltés...</div>) : <>{pagerData?.posts.map((v,i) => {return (
         <div key={i}>
         <div key={i} className={styles.posts}>
           <div className={styles.focim}>
@@ -106,6 +106,7 @@ export default function Getposts() {
             <><div key={i} className={styles.page} onClick={() => {setSkipper(i === 0 ? 0 : (v - 1) * 2),pager}}>{v}</div></>))}</> : <>{range(1,Math.ceil((pageData?.posts.length)/2)).map((v,i,a) => (
               <><div key={i} className={styles.page} onClick={() => {setSkipper(i === 0 ? 0 : (v - 1) * 2),pager}}>{v}</div></>))}</>}
         </div>
+        </>}
         </>
     )
 
