@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Getposts.module.css';
+import { useContext } from 'react';
+import { HatterContext } from '../pages/HatterContext';
+import { KozepContext } from '../pages/KozepContext';
+import { AfterContext } from '../pages/AfterContext';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { useState, useEffect } from 'react';
@@ -11,6 +15,10 @@ import { QUERY_POSTS_FOR_PAGES } from '../gql/GetPosts/QUERY_POSTS_FOR_PAGES';
 
 
 export default function Getposts() {
+
+  const { tarthatter, setTarthatter } = useContext(HatterContext);
+  const { tartkozep, setTartkozep } = useContext(KozepContext);
+  const { after, setAfter } = useContext(AfterContext);
 
   const [skipper, setSkipper] = useState(0);
 
@@ -53,6 +61,12 @@ export default function Getposts() {
     useEffect(() => {
       pager()
     }, [pager]);
+
+    useEffect(() => {
+      setTarthatter(0);
+      setTartkozep(0);
+      setAfter(0);
+    }, [setTarthatter, setTartkozep, setAfter]);
 
     // DocuemntRendererProps
     const renderers = {

@@ -32,22 +32,22 @@ export default function CommentView({postID}) {
     const {author, name, race, races, image, url, createdAt, content, document, id: commentID, id: userID, commentsCount} = data?.post?.comments || {};
 
     // update data
-    let dataLen = data?.post?.comments.length;
+    let dataLen = data?.post?.comments.length-1;
     const commentBox = 208;
-    const tartkozepdiv = 420;
+    const tartkozepdiv = 565;
     const stat = 24;
     const beforeBox = 20;
-    const afterBox = 155;
+    const afterBox = 180;
     const commentwrite = 135;
 
       // .tarthatter update
       setTarthatter(((dataLen*commentBox) + tartkozepdiv + stat + commentwrite + beforeBox + afterBox));
 
       // .tartkozep update
-      setTartkozep(((dataLen*commentBox) + tartkozepdiv + stat + commentwrite));
+      setTartkozep(((dataLen*commentBox) + tartkozepdiv + stat + beforeBox + commentwrite));
 
       // ::after update
-      setAfter(((dataLen*commentBox) + tartkozepdiv + commentwrite));
+      setAfter(((dataLen*commentBox) + tartkozepdiv + beforeBox  + commentwrite));
 
     // const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
     

@@ -19,10 +19,22 @@ export default function App({ Component, pageProps }) {
   const [tartkozep, setTartkozep] = useState(0);
   const [after, setAfter] = useState(0);
 
+  const handleUpdateTarthatter = (value) => {
+    setTarthatter(value);
+  };
+
+  const handleUpdateTartkozep = (value) => {
+    setTartkozep(value);
+  };
+
+  const handleUpdateAfter = (value) => {
+    setAfter(value);
+  };
+
   return <>
-    <HatterContext.Provider value={{tarthatter,setTarthatter}}>
-    <KozepContext.Provider value={{tartkozep,setTartkozep}}>
-    <AfterContext.Provider value={{after,setAfter}}>
+    <HatterContext.Provider value={{tarthatter,setTarthatter: handleUpdateTarthatter}}>
+    <KozepContext.Provider value={{tartkozep,setTartkozep: handleUpdateTartkozep}}>
+    <AfterContext.Provider value={{after,setAfter: handleUpdateAfter}}>
       <Layout>
         <GlobalStyles />
         <Component {...pageProps} />

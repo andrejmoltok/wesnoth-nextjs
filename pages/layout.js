@@ -6,7 +6,6 @@ import client from "../apollo-client"
 import Cookies from 'universal-cookie';
 import LoginReg from '@/components/loginreg';
 import SideProfile from '@/components/sideprofile';
-import GetPost from '@/pages/post/[id]';
 import { HatterContext } from '@/pages/HatterContext';
 import { KozepContext } from '@/pages/KozepContext';
 import { AfterContext } from '@/pages/AfterContext';
@@ -21,6 +20,10 @@ function Layout({ children }) {
     const { tarthatter, setTarthatter } = useContext(HatterContext);
     const { tartkozep, setTartkozep } = useContext(KozepContext);
     const { after, setAfter } = useContext(AfterContext);
+
+    const tarthatterValue = tarthatter || 600;
+    const tartkozepValue = tartkozep || 420;
+    const afterValue = after || 405;
 
     useEffect(() => {
       const cookies = new Cookies();
@@ -79,7 +82,7 @@ function Layout({ children }) {
               flex-direction: row;
               justify-content: space-between;
               color: #bdb58c;
-              height: ${children === <GetPost /> ? tarthatter : 600}px;
+              height: ${tarthatterValue}px;
             }
 
             .tartkozep::before {
@@ -101,7 +104,7 @@ function Layout({ children }) {
               width: 100%;
               height: 155px;
               position: absolute;
-              top: ${children === <GetPost /> ? after : 405}px;
+              top: ${afterValue}px;
               z-index: -1000;
               background-image: url('/tart-szel.jpg');
               background-repeat: no-repeat;
@@ -111,7 +114,7 @@ function Layout({ children }) {
             .tartkozep {
               margin: 0 0;
               width: 100%;
-              height: ${children.type === <GetPost /> ? tartkozep : 420}px;
+              height: ${tartkozepValue}px;
               display: flex;
               flex-direction: column;
               position: relative;

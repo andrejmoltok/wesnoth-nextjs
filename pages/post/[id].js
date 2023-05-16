@@ -27,24 +27,8 @@ export default function GetPost() {
     const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount, id: postID } = data?.post || {};
 
     const [isWrite, setIsWrite] = useState(false);
-    const [getTheID, setGetTheID] = useState(false);
 
-    useEffect(() => {
-      const cookies = new Cookies();
-      if (cookies.get('id')) {
-        setGetTheID(true);
-        setIsWrite(true);
-      } else {
-        setIsWrite(false);
-      }
-    }, []);
-
-    useEffect(() => {
-      window.scrollTo({
-        top: 240,
-        behavior: 'smooth',
-      });
-    }, []);
+    const cookies = new Cookies();
 
     // DocuemntRendererProps
     const renderers = {
@@ -93,11 +77,11 @@ export default function GetPost() {
           <div className={styler.comment}>
             <div className={styler.postStat}>
               {/* GetTheID for LoggedIn/LoggedOut State */}
-              {(!getTheID) ? <>
+              {(!cookies.get('id')) ? <>
                 <div className={styler.writeBtn} >
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Jelentkezz be</div>
                 </div></> : <>
-                <div className={styler.writeBtn} onClick={() => {setIsWrite(true)}}>
+                <div className={styler.writeBtn} onClick={() => setIsWrite(!isWrite)}>
                   <div><FontAwesomeIcon icon={faPenToSquare} size="sm" /> Hozzászólok</div>
                 </div>
               </>}
@@ -108,8 +92,8 @@ export default function GetPost() {
             
             <CommentView postID={id} />
             
-            {(getTheID || (getTheID && from === 'comments')) && <CommentWrite isWrite={true} id={id} />}
-
+            {((cookies.get('id')) || (cookies.get('id') && from === 'comments')) && <CommentWrite isWrite={isWrite} id={id} />}
+            
           </div> {/* comment END */}
         </div> {/* posts END */}
       </>

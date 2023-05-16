@@ -24,7 +24,6 @@
     "eslint-config-next": "^13.2.4",
     "eslint-plugin-import": "^2.27.5",
     "graphql": "^16.6.0",
-    "isomorphic-unfetch": "^4.0.2",
     "next": "^13.4.1",
     "nodemailer": "^6.9.1",
     "rate-limiter-flexible": "^2.4.1",
