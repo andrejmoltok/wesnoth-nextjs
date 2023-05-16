@@ -52,7 +52,7 @@ export default function Getposts() {
     // pager() function runs every time there's a click
     useEffect(() => {
       pager()
-    }, []);
+    }, [pager]);
 
     // DocuemntRendererProps
     const renderers = {

@@ -1,6 +1,10 @@
 import styler from '../styles/CommentView.module.css';
 import Image from 'next/image';
 import Cookies from 'universal-cookie';
+import { HatterContext } from '../pages/HatterContext';
+import { KozepContext } from '../pages/KozepContext';
+import { AfterContext } from '../pages/AfterContext';
+import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFeather, faCalendarDays, faTrashCan, faListOl } from '@fortawesome/free-solid-svg-icons'
 import { useQuery, useMutation } from '@apollo/client';
@@ -10,7 +14,11 @@ import { DELETE_COMMENT } from '../gql/CommentView/COMMENT_DELETE';
 import { COMMENT_DISCONNECT } from '../gql/CommentView/COMMENT_DISCONNECT';
 // import { COMMENT_REPLACE } from '../gql/CommentView/COMMENT_REPLACE';
 
-export default function CommentView({postID, hatter, kozep, after}) {
+export default function CommentView({postID}) {
+
+    const { tarthatter, setTarthatter } = useContext(HatterContext);
+    const { tartkozep, setTartkozep } = useContext(KozepContext);
+    const { after, setAfter } = useContext(AfterContext);
 
     const { loading, error, data } = useQuery(QUERY_POST_COMMENTS, {
         variables: {
@@ -26,22 +34,21 @@ export default function CommentView({postID, hatter, kozep, after}) {
     // update data
     let dataLen = data?.post?.comments.length;
     const commentBox = 208;
-    const tartkozep = 420;
+    const tartkozepdiv = 420;
     const stat = 24;
     const beforeBox = 20;
     const afterBox = 155;
     const commentwrite = 135;
-    
-    // .tarthatter update
-    hatter(((dataLen*commentBox) + tartkozep + stat + commentwrite + beforeBox + afterBox));
 
-    // .tartkozep update
-    kozep(((dataLen*commentBox) + tartkozep + stat + commentwrite))
+      // .tarthatter update
+      setTarthatter(((dataLen*commentBox) + tartkozepdiv + stat + commentwrite + beforeBox + afterBox));
 
-    // ::after update
-    after(((dataLen*commentBox) + tartkozep + commentwrite))
+      // .tartkozep update
+      setTartkozep(((dataLen*commentBox) + tartkozepdiv + stat + commentwrite));
 
-    // // replace comment mutation
+      // ::after update
+      setAfter(((dataLen*commentBox) + tartkozepdiv + commentwrite));
+
     // const [replace, { loading: replaceLoading, error: replaceError, data: replaceData }] = useMutation(COMMENT_REPLACE);
     
     // disconnect Comment mutation

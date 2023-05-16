@@ -1,23 +1,18 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../../styles/Home.module.scss';
-import styler from '../../styles/ID.module.css';
+import styler from '../../styles/GetPost.module.css';
 import CommentView from '../../components/commentview';
 import CommentWrite from '../../components/commentWrite';
-import LoginReg from '../../components/loginreg';
-import SideProfile from '../../components/sideprofile';
 import Cookies from 'universal-cookie';
-import client from '../../apollo-client';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery, ApolloProvider } from '@apollo/client';
+import { useQuery} from '@apollo/client';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faFeather, faCalendarDays, faListOl, faCoins, faPoo } from '@fortawesome/free-solid-svg-icons'
 import { QUERY_POST_BY_ID } from '../../gql/ID/QUERY_POST_BY_ID';
 
 
-function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
+export default function GetPost() {
 
     const router = useRouter();
 
@@ -32,21 +27,17 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
     const { title, content, document, author, name, race, races, image, url, createdAt, commentsCount, id: postID } = data?.post || {};
 
     const [isWrite, setIsWrite] = useState(false);
-
     const [getTheID, setGetTheID] = useState(false);
 
     useEffect(() => {
-      const interval = setInterval(() => {
-        const cookies = new Cookies();
+      const cookies = new Cookies();
       if (cookies.get('id')) {
-        setGetTheID(!getTheID)
+        setGetTheID(true);
+        setIsWrite(true);
       } else {
-        setGetTheID(getTheID)
-        setIsWrite(false)
+        setIsWrite(false);
       }
-      }, 100)
-        return () => clearInterval(interval)
-    }, [getTheID]);
+    }, []);
 
     useEffect(() => {
       window.scrollTo({
@@ -114,161 +105,14 @@ function GetPost({tarthatterUpdate,tartkozepUpdate,afterUpdate}) {
               <div><FontAwesomeIcon icon={faListOl} size="sm" /> Hozzászólások száma: {commentsCount}</div>
 
             </div> {/* postStat END */}
-
-            {<CommentView postID={id} hatter={tarthatterUpdate} kozep={tartkozepUpdate} after={afterUpdate}/>}
-
+            
+            <CommentView postID={id} />
+            
             {(getTheID || (getTheID && from === 'comments')) && <CommentWrite isWrite={true} id={id} />}
 
           </div> {/* comment END */}
-        </div>
+        </div> {/* posts END */}
       </>
     );
 
-  }
-
-
-export default function ID() {
-
-    const router = useRouter();
-    
-    const [getTheID, setGetTheID] = useState(undefined);
-    const [theID, setTheID] = useState('');
-
-    const [tarthatter, setTarthatter] = useState(0);
-    const [tartkozep, setTartkozep] = useState(0);
-    const [after, setAfter] = useState(0);
-
-    const handleTarthatter = (newtarthatter) => {
-      setTarthatter(newtarthatter);
-    };
-
-    const handleTartkozep = (newtartkozep) => {
-      setTartkozep(newtartkozep);
-    };
-
-    const handleAfter = (newafter) => {
-      setAfter(newafter);
-    };
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        const cookies = new Cookies();
-      if (cookies.get('id')) {
-        setGetTheID(true);
-        setTheID(cookies.get('id'))
-      } else {
-        setGetTheID(false);
-        setTheID('');
-      }
-      }, 10)
-        return () => clearInterval(interval)
-    }, []);
-
-    const handleHome = () => {
-      router.push(`/`);
-    };
-
-    const handleProfile = (value) => {
-      router.push(`/profile/${value}`);
-    };
-
-    return (
-        <>
-        <Head>
-          <title>Magyar Wesnoth Közösségi Portál</title>
-          <meta name="description" content="Magyar Wesnoth Közösségi Portál" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <ApolloProvider client={client}>
-        <main className={styles.main}>
-          <div className={styles.fejlec}>
-            <div className={styles.logo}>
-                <Image
-                    src='/logo-hu.png'
-                    alt="Logo"
-                    width={415}
-                    height={189}
-                    priority
-                    className={styles.logoImg}
-                />
-            </div>
-          <div className={styles.navbar}>
-                <div className={styles.navbarText} onClick={() => {handleHome()}}>Főoldal</div>
-                <div className={styles.navbarText} onClick={getTheID && getTheID !== false ? () => handleProfile(theID) : undefined}>Profil</div>
-                <div className={styles.navbarText}>Fórum</div>
-          </div>
-        </div>
-        
-      <div className="tarthatter"> {/*The style has to be dynamic reading from query length */}
-          <style jsx>{`
-            .tarthatter {
-              margin: 0px 56.5px;
-              background-image: url('/tart-hatter.jpg');
-              background-repeat: repeat-y;
-              background-size: contain;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              color: #bdb58c;
-              height: ${tarthatter}px;
-            }
-
-            .tartkozep::before {
-              content: " ";
-              display: block;
-              width: 100%;
-              height: 155px;
-              position: absolute;
-              top: -20px;
-              z-index: -1000;
-              background-image: url('/tart-szel.jpg');
-              background-repeat: no-repeat;
-              background-size: contain;
-            }
-            
-            .tartkozep::after {
-              content: " ";
-              display: block;
-              width: 100%;
-              height: 155px;
-              position: absolute;
-              top: ${after}px;
-              z-index: -1000;
-              background-image: url('/tart-szel.jpg');
-              background-repeat: no-repeat;
-              background-size: contain;
-            }
-            
-            .tartkozep {
-              margin: 0 0;
-              width: 100%;
-              height: ${tartkozep}px;
-              display: flex;
-              flex-direction: column;
-              position: relative;
-              top: 20px;
-              left: 0px;
-              background-image: url('/tart-kozep.jpg');
-              background-size: contain;
-              background-repeat: repeat-y;
-            }
-          `}</style>
-          <div className={styles.sideProfile}>
-            {(!getTheID) ? <LoginReg /> : <SideProfile />}
-          </div>
-        <div className={styles.kozep}>
-          <div className="tartkozep"> {/*The style has to be dynamic reading from query length */}
-              <GetPost tarthatterUpdate={handleTarthatter} tartkozepUpdate={handleTartkozep} afterUpdate={handleAfter}/>
-            </div>
-        </div>
-      </div>
-        
-        <div className={styles.lablec}>
-          <div></div>
-        </div>
-        </main>
-        </ApolloProvider>
-        </>
-    )
   }
