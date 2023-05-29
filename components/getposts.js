@@ -32,7 +32,7 @@ export default function Getposts() {
         }
       ],
       "where": {
-        "publishedState": {
+        "state": {
           "equals": "Published",
         }
       }
@@ -43,7 +43,7 @@ export default function Getposts() {
   const {loading: pageLoading, error: pageError, data: pageData} = useQuery(QUERY_POSTS_FOR_PAGES,
     { variables: {
       "where": {
-        "publishedState": {
+        "state": {
           "equals": "Published",
         }
       }

@@ -32,6 +32,8 @@ export default function Login({handleShowRegister, handleShowLogin}) {
     useEffect(() => {
       console.log("");
     }, [email]);
+
+    
     // verify EMAIL from form
     // then handleLogin
     function verify(e) {
